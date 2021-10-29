@@ -57,10 +57,11 @@ public class BasicOpMode_Iterative extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftFrontWheel = null;
-    private DcMotor rightFrontWheel = null;
-    private DcMotor leftBackWheel = null;
-    private DcMotor rightBackWheel = null;
+    private DcMotor leftFrontWheel;
+    private DcMotor rightFrontWheel;
+    private DcMotor leftBackWheel;
+    private DcMotor rightBackWheel;
+    private DcMotor elevatorMotor;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -75,6 +76,7 @@ public class BasicOpMode_Iterative extends OpMode
         rightFrontWheel = hardwareMap.get(DcMotor.class, "right_front");
         leftBackWheel = hardwareMap.get(DcMotor.class, "left_back");
         rightBackWheel = hardwareMap.get(DcMotor.class, "right_back");
+        elevatorMotor = hardwareMap.get(DcMotor.class, "elevator");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -82,6 +84,8 @@ public class BasicOpMode_Iterative extends OpMode
         rightFrontWheel.setDirection(DcMotor.Direction.REVERSE);
         leftBackWheel.setDirection(DcMotor.Direction.FORWARD);
         rightBackWheel.setDirection(DcMotor.Direction.REVERSE);
+        elevatorMotor.setDirection(DcMotor.Direction.FORWARD);
+
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -154,9 +158,15 @@ public class BasicOpMode_Iterative extends OpMode
         rightBackWheel.setPower(rightBackPower);
 
         // Show the elapsed game time and wheel power.
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
+//        telemetry.addData("Status", "Run Time: " + runtime.toString());
                             //TODO: fix the following line to work with mecanum
-        telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+//        telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+
+        /*
+        gamepad1.dpad_direction
+         *
+         */
+
     }
 
     /*
@@ -168,5 +178,21 @@ public class BasicOpMode_Iterative extends OpMode
         rightFrontWheel.setPower(0);
         leftBackWheel.setPower(0);
         rightBackWheel.setPower(0);
+        elevatorMotor.setPower(0);
+    }
+
+    public void wait (double seconds) {
+        double startTime = runtime.seconds();
+        while (runtime.seconds() - startTime < seconds) {
+            continue;
+        }
+        /*
+        while (true) {
+            if (runtime.seconds() - startTime > seconds) {
+                return;
+                //break;
+            }
+        }
+         */
     }
 }
