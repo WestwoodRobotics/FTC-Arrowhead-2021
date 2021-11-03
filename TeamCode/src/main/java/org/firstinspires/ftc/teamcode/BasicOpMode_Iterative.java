@@ -29,10 +29,13 @@
 
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
+import static java.lang.Math.abs;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import java.util.*;
@@ -62,6 +65,7 @@ public class BasicOpMode_Iterative extends OpMode
     private DcMotor leftBackWheel;
     private DcMotor rightBackWheel;
     private DcMotor elevatorMotor;
+    private DcMotor intakeMotor;
     private Servo carouselServo;
     private Servo holderServo;
     /*
@@ -79,7 +83,7 @@ public class BasicOpMode_Iterative extends OpMode
         leftBackWheel = hardwareMap.get(DcMotor.class, "left_back");
         rightBackWheel = hardwareMap.get(DcMotor.class, "right_back");
         elevatorMotor = hardwareMap.get(DcMotor.class, "elevator");
-        intakeMotor = hardwarMap.get(DcMotor.class, "intake");
+        intakeMotor = hardwareMap.get(DcMotor.class, "intake");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         leftFrontWheel.setDirection(DcMotor.Direction.FORWARD);
