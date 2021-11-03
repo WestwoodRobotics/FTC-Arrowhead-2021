@@ -62,6 +62,8 @@ public class BasicOpMode_Iterative extends OpMode
     private DcMotor leftBackWheel;
     private DcMotor rightBackWheel;
     private DcMotor elevatorMotor;
+    private Servo carouselServo;
+    private Servo holderServo;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -77,7 +79,7 @@ public class BasicOpMode_Iterative extends OpMode
         leftBackWheel = hardwareMap.get(DcMotor.class, "left_back");
         rightBackWheel = hardwareMap.get(DcMotor.class, "right_back");
         elevatorMotor = hardwareMap.get(DcMotor.class, "elevator");
-
+        intakeMotor = hardwarMap.get(DcMotor.class, "intake");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         leftFrontWheel.setDirection(DcMotor.Direction.FORWARD);
@@ -85,7 +87,7 @@ public class BasicOpMode_Iterative extends OpMode
         leftBackWheel.setDirection(DcMotor.Direction.FORWARD);
         rightBackWheel.setDirection(DcMotor.Direction.REVERSE);
         elevatorMotor.setDirection(DcMotor.Direction.FORWARD);
-
+        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -116,7 +118,8 @@ public class BasicOpMode_Iterative extends OpMode
         double rightFrontPower;
         double leftBackPower;
         double rightBackPower;
-
+        double elevatorPower = 1;
+        double intakePower = 1;
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
 
@@ -125,10 +128,20 @@ public class BasicOpMode_Iterative extends OpMode
         double forwardBackward = -gamepad1.left_stick_y;
         double straifing =  gamepad1.left_stick_x;
         double turning = gamepad1.right_stick_x;
-
-
-
-
+        boolean carousel = gamepad1.b;//TODO: make single click
+        boolean holderPickUp = gamepad1.a;make intake toggleable
+        boolean holderRelease = gamepad1.y;
+        //double elevatorHeight = elevatorMotor.getCurrentPosition(); TODO: test position values
+        int elevatorPos = 1;
+        if (gamepad1.dpad_up == true){
+            elevatorMotor.setTargetPosition(1/*TODO:put correct number*/)
+        }
+        if (gamepad1.dpad_right == true){
+            elevatorMotor.setTargetPosition(1/*TODO:put correct number*/)
+        }
+        if (gamepad1.dpad_right == true){
+            elevatorMotor.setTargetPosition(1/*TODO:put correct number*/)
+        }
 
 
 
@@ -137,8 +150,8 @@ public class BasicOpMode_Iterative extends OpMode
         //TODO: replace range.clip with a method that divides all of the joysitck values above the absolute value of one down proportionally
         leftFrontPower    = forwardBackward + turning + straifing;
         rightFrontPower   = forwardBackward - turning - straifing;
-        leftBackPower     = forwardBackward + turning + straifing;
-        rightBackPower    = forwardBackward - turning - straifing;
+        leftBackPower     = forwardBackward + turning - straifing;
+        rightBackPower    = forwardBackward - turning + straifing;
         double[] powVals = {abs(leftFrontPower), abs(rightFrontPower), abs(leftBackPower), abs(rightBackPower)};
         Arrays.sort(powVals);
         if ((abs(leftFrontPower)) > 1 || (abs(rightFrontPower)) > 1 || (abs(leftBackPower) > 1) || (abs(rightBackPower) > 1))    {
@@ -151,12 +164,18 @@ public class BasicOpMode_Iterative extends OpMode
         // leftPower  = -gamepad1.left_stick_y ;
         // rightPower = -gamepad1.right_stick_y ;
 
+        if (holderPickUp) {
+            holderServo.setPosition(0.25)
+        }
+        if (holderRelease) {
+            holderServo.setPosition(0.75)
+        }
         // Send calculated power to wheels
         leftFrontWheel.setPower(leftFrontPower);
         rightFrontWheel.setPower(rightFrontPower);
         leftBackWheel.setPower(leftBackPower);
         rightBackWheel.setPower(rightBackPower);
-
+        intakeMotor.setPower(intakePower);
         // Show the elapsed game time and wheel power.
 //        telemetry.addData("Status", "Run Time: " + runtime.toString());
                             //TODO: fix the following line to work with mecanum
@@ -179,6 +198,7 @@ public class BasicOpMode_Iterative extends OpMode
         leftBackWheel.setPower(0);
         rightBackWheel.setPower(0);
         elevatorMotor.setPower(0);
+        intakeMotor.setPower(0);
     }
 
     public void wait (double seconds) {
