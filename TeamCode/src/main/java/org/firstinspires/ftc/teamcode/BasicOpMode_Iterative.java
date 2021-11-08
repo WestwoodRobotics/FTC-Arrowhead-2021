@@ -28,7 +28,7 @@
  */
 
 package org.firstinspires.ftc.robotcontroller.external.samples;
-
+//done other than testing?
 import static java.lang.Math.abs;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -39,7 +39,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import java.util.*;
-
+/*
+TODOs:
+remove @overides
+ */
+*/
+ */
 /**
  * This file contains an example of an iterative (Non-Linear) "OpMode".
  * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
@@ -71,10 +76,10 @@ public class BasicOpMode_Iterative extends OpMode
     /*
      * Code to run ONCE when the driver hits INIT
      */
-    @Override
+
     public void init() {
         telemetry.addData("Status", "Initialized");
-//can u guys see this - Jadon
+
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -84,6 +89,9 @@ public class BasicOpMode_Iterative extends OpMode
         rightBackWheel = hardwareMap.get(DcMotor.class, "right_back");
         elevatorMotor = hardwareMap.get(DcMotor.class, "elevator");
         intakeMotor = hardwareMap.get(DcMotor.class, "intake");
+        carouselServo = hardwareMap.get(Servo.class, "carousel");//continuous servo
+        holderServo = hardwareMap.get(Servo.class, "holder")//TODO:wrong?
+        //TODO: add max and min values for servo
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         leftFrontWheel.setDirection(DcMotor.Direction.FORWARD);
@@ -107,7 +115,7 @@ public class BasicOpMode_Iterative extends OpMode
     /*
      * Code to run ONCE when the driver hits PLAY
      */
-    @Override
+
     public void start() {
         runtime.reset();
     }
@@ -115,7 +123,7 @@ public class BasicOpMode_Iterative extends OpMode
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
-    @Override
+
     public void loop() {
         // Setup a variable for each drive wheel to save power level for telemetry
         double leftFrontPower;
@@ -123,7 +131,7 @@ public class BasicOpMode_Iterative extends OpMode
         double leftBackPower;
         double rightBackPower;
         double elevatorPower = 1;
-        double intakePower = 1;
+        double intakePower;//TODO: servo power? and intake toggleablle
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
 
@@ -132,12 +140,11 @@ public class BasicOpMode_Iterative extends OpMode
         double forwardBackward = -gamepad1.left_stick_y;
         double straifing =  gamepad1.left_stick_x;
         double turning = gamepad1.right_stick_x;
-        boolean carousel = gamepad1.b;//TODO: make single click
-        boolean holderPickUp = gamepad1.a;make intake toggleable
-        boolean holderRelease = gamepad1.y;
+
         //double elevatorHeight = elevatorMotor.getCurrentPosition(); TODO: test position values
         int elevatorPos = 1;
         if (gamepad1.dpad_up == true){
+            //elevatorMotor.setPowe
             elevatorMotor.setTargetPosition(1/*TODO:put correct number*/)
         }
         if (gamepad1.dpad_right == true){
@@ -151,7 +158,6 @@ public class BasicOpMode_Iterative extends OpMode
 
 
 
-        //TODO: replace range.clip with a method that divides all of the joysitck values above the absolute value of one down proportionally
         leftFrontPower    = forwardBackward + turning + straifing;
         rightFrontPower   = forwardBackward - turning - straifing;
         leftBackPower     = forwardBackward + turning - straifing;
@@ -165,25 +171,30 @@ public class BasicOpMode_Iterative extends OpMode
              leftBackPower     /= maxPower;
              rightBackPower    /= maxPower;
               }
-        // leftPower  = -gamepad1.left_stick_y ;
-        // rightPower = -gamepad1.right_stick_y ;
 
-        if (holderPickUp) {
-            holderServo.setPosition(0.25)
+
+        if (gamepad1.a) {
+            holderServo.setPosition(0.25/*TODO: put correct numbers*/);
         }
-        if (holderRelease) {
-            holderServo.setPosition(0.75)
+        if (gamepad1.y) {
+            holderServo.setPosition(0.75/*TODO: put correct number*/);
         }
+        if (gamepad1.left_bumper){
+            intakePower = 1;
+        }
+        if (gamepad1.right_bumper){
+            intakePower = 0;
+        }
+
         // Send calculated power to wheels
         leftFrontWheel.setPower(leftFrontPower);
         rightFrontWheel.setPower(rightFrontPower);
         leftBackWheel.setPower(leftBackPower);
         rightBackWheel.setPower(rightBackPower);
         intakeMotor.setPower(intakePower);
-        // Show the elapsed game time and wheel power.
-//        telemetry.addData("Status", "Run Time: " + runtime.toString());
-                            //TODO: fix the following line to work with mecanum
-//        telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+        telemetry.addData("Status", "Run Time: " + runtime.toString());
+                            //TODO: fix the following line to work with mecanum done?
+        telemetry.addData("Motors", "left_front (%.2f), right_front (%.2f)", "left_back (%.2f)", "right_back (%.2f)", leftFrontPower, rightFrontPower, leftBackPower, rightBackPower);
 
         /*
         gamepad1.dpad_direction
@@ -195,7 +206,7 @@ public class BasicOpMode_Iterative extends OpMode
     /*
      * Code to run ONCE after the driver hits STOP
      */
-    @Override
+
     public void stop() {
         leftFrontWheel.setPower(0);
         rightFrontWheel.setPower(0);
