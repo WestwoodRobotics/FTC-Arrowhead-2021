@@ -130,7 +130,7 @@ public class BasicOpMode_Iterative extends OpMode
         double rightFrontPower;
         double leftBackPower;
         double rightBackPower;
-        double elevatorPower = 1;
+        double elevatorPower;
         double intakePower;//TODO: servo power? and intake toggleablle
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
@@ -144,14 +144,41 @@ public class BasicOpMode_Iterative extends OpMode
         //double elevatorHeight = elevatorMotor.getCurrentPosition(); TODO: test position values
         int elevatorPos = 1;
         if (gamepad1.dpad_up == true){
-            //elevatorMotor.setPowe
-            elevatorMotor.setTargetPosition(1/*TODO:put correct number*/)
+            elevatorMotor.setTargetPosition(1/*TODO:put target position number*/);
+            while (elevatorMotor.getCurrentPosition() != /*TODO:put target posotion number*/){
+                while (elevatorMotor.getCurrentPosition() < /*TODO: put target postition*/) {
+                    elevatorMotor.setPower(1);//TODO:dont tell me this is getting to PID
+                }
+                while (elevatorMotor.getCurrentPosition() > /*TODO: put target position*/){
+                    elevatorMotor.setPower(-1);
+                }
+            }
+            elevatorMotor.setPower(0);
+
         }
         if (gamepad1.dpad_right == true){
-            elevatorMotor.setTargetPosition(1/*TODO:put correct number*/)
+            elevatorMotor.setTargetPosition(1/*TODO:put target position number*/);
+            while (elevatorMotor.getCurrentPosition() != /*TODO:put target posotion number*/){
+                while (elevatorMotor.getCurrentPosition() < /*TODO: put target postition*/) {
+                    elevatorMotor.setPower(1);//TODO:dont tell me this is getting to PID
+                }
+                while (elevatorMotor.getCurrentPosition() > /*TODO: put target position*/){
+                    elevatorMotor.setPower(-1);
+                }
+            }
+            elevatorMotor.setPower(0);
         }
-        if (gamepad1.dpad_right == true){
-            elevatorMotor.setTargetPosition(1/*TODO:put correct number*/)
+        if (gamepad1.dpad_left == true){
+            elevatorMotor.setTargetPosition(1/*TODO:put target position number*/);
+            while (elevatorMotor.getCurrentPosition() != /*TODO:put target posotion number*/){
+                while (elevatorMotor.getCurrentPosition() < /*TODO: put target postition*/) {
+                    elevatorMotor.setPower(1);//TODO:dont tell me this is getting to PID
+                }
+                while (elevatorMotor.getCurrentPosition() > /*TODO: put target position*/){
+                    elevatorMotor.setPower(-1);
+                }
+            }
+            elevatorMotor.setPower(0);
         }
 
 
