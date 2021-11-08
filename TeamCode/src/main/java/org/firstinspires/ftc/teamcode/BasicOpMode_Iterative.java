@@ -89,7 +89,7 @@ public class BasicOpMode_Iterative extends OpMode
         rightBackWheel = hardwareMap.get(DcMotor.class, "right_back");
         elevatorMotor = hardwareMap.get(DcMotor.class, "elevator");
         intakeMotor = hardwareMap.get(DcMotor.class, "intake");
-        carouselServo = hardwareMap.get(Servo.class, "carousel");//continuous servo
+        carouselServo = hardwareMap.get(CRServo.class, "carousel");//continuous servo
         holderServo = hardwareMap.get(Servo.class, "holder")//TODO:wrong?
         //TODO: add max and min values for servo
         // Most robots need the motor on one side to be reversed to drive forward
@@ -141,44 +141,81 @@ public class BasicOpMode_Iterative extends OpMode
         double straifing =  gamepad1.left_stick_x;
         double turning = gamepad1.right_stick_x;
 
+
         //double elevatorHeight = elevatorMotor.getCurrentPosition(); TODO: test position values
         int elevatorPos = 1;
-        if (gamepad1.dpad_up == true){
-            elevatorMotor.setTargetPosition(1/*TODO:put target position number*/);
-            while (elevatorMotor.getCurrentPosition() != /*TODO:put target posotion number*/){
-                while (elevatorMotor.getCurrentPosition() < /*TODO: put target postition*/) {
-                    elevatorMotor.setPower(1);//TODO:dont tell me this is getting to PID
+        int seudoPID = 1;
+        /*if (gamepad1.dpad_up == true){
+            seudoPID = 1;
+            elevatorMotor.setTargetPosition(1/TODO:put target position number*);
+            while (elevatorMotor.getCurrentPosition() != /TODO:put target posotion number){
+                while (elevatorMotor.getCurrentPosition() < /*TODO: put target postition) {
+                    elevatorMotor.setPower(1/seudoPID);//TODO:dont tell me this is getting to PID
+                    suedoPID++;
                 }
-                while (elevatorMotor.getCurrentPosition() > /*TODO: put target position*/){
-                    elevatorMotor.setPower(-1);
+                while (elevatorMotor.getCurrentPosition() > /*TODO: put target position){
+                    elevatorMotor.setPower(-1/seudoPID);
+                    seudoPID++;
+                }
+                if(seudoPID > 10){
+                    break;
                 }
             }
             elevatorMotor.setPower(0);
 
         }
         if (gamepad1.dpad_right == true){
-            elevatorMotor.setTargetPosition(1/*TODO:put target position number*/);
-            while (elevatorMotor.getCurrentPosition() != /*TODO:put target posotion number*/){
-                while (elevatorMotor.getCurrentPosition() < /*TODO: put target postition*/) {
-                    elevatorMotor.setPower(1);//TODO:dont tell me this is getting to PID
+            seudoPID = 1;
+            elevatorMotor.setTargetPosition(1/*TODO:put target position number);
+            while (elevatorMotor.getCurrentPosition() != /*TODO:put target posotion number){
+                while (elevatorMotor.getCurrentPosition() < /*TODO: put target postition) {
+                    elevatorMotor.setPower(1/seudoPID);//TODO:dont tell me this is getting to PID
+                    seudoPID++;
                 }
-                while (elevatorMotor.getCurrentPosition() > /*TODO: put target position*/){
-                    elevatorMotor.setPower(-1);
+                while (elevatorMotor.getCurrentPosition() > /*TODO: put target position){
+                    elevatorMotor.setPower(-1/seudoPID);
+                    seudoPID++;//pstupid
+                }
+                if(seudoPID > 10){
+                    break;
                 }
             }
             elevatorMotor.setPower(0);
         }
         if (gamepad1.dpad_left == true){
-            elevatorMotor.setTargetPosition(1/*TODO:put target position number*/);
-            while (elevatorMotor.getCurrentPosition() != /*TODO:put target posotion number*/){
-                while (elevatorMotor.getCurrentPosition() < /*TODO: put target postition*/) {
-                    elevatorMotor.setPower(1);//TODO:dont tell me this is getting to PID
+            seudoPID = 1;
+            elevatorMotor.setTargetPosition(1/*TODO:put target position number);
+            while (elevatorMotor.getCurrentPosition() != /*TODO:put target posotion number){
+                while (elevatorMotor.getCurrentPosition() < /*TODO: put target postition) {
+                    elevatorMotor.setPower(1)/seudoPID;//TODO:dont tell me this is getting to PID
+                    seudoPID++;
                 }
-                while (elevatorMotor.getCurrentPosition() > /*TODO: put target position*/){
-                    elevatorMotor.setPower(-1);
+                while (elevatorMotor.getCurrentPosition() > /*TODO: put target position){
+                    elevatorMotor.setPower(-1/seudoPID);
+                    seudoPID++;
+                }
+                if(seudoPID > 10){
+                    break;
                 }
             }
             elevatorMotor.setPower(0);
+        }
+        */
+
+        if (gamepad2.dpad_up) {
+            elevatorMotor = 0.75;
+        }
+        else if (gamepad2.dpad_down) {
+            elevatorMotor = -0.75;
+        }
+        else if (gamepad2.dpad_left) {
+            elevatorMotor = -0.25;
+        }
+        else if (gamepad2.dpad_right) {
+            elevatorMotor = 0.25;
+        }
+        else {
+            elevatorMotor = 0;
         }
 
 
@@ -200,17 +237,31 @@ public class BasicOpMode_Iterative extends OpMode
               }
 
 
-        if (gamepad1.a) {
+        if (gamepad2.a) {
             holderServo.setPosition(0.25/*TODO: put correct numbers*/);
         }
-        if (gamepad1.y) {
+        else if (gamepad2.y) {
             holderServo.setPosition(0.75/*TODO: put correct number*/);
         }
-        if (gamepad1.left_bumper){
+        if (gamepad2.left_bumper){
             intakePower = 1;
         }
-        if (gamepad1.right_bumper){
+        else if (gamepad2.right_bumper){
             intakePower = 0;
+        }
+
+
+        if (gamepad1.left_trigger > 0) {
+            leftFrontPower = -0.3;
+            leftBackPower = -0.3;
+            rightFrontPower = 0.3;
+            rightBackPower = 0.3;
+        }
+        else if (gamepad1.right_trigger > 0) {
+            leftFrontPower = 0.3;
+            leftBackPower = 0.3;
+            rightFrontPower = -0.3;
+            rightBackPower = -0.3;
         }
 
         // Send calculated power to wheels
