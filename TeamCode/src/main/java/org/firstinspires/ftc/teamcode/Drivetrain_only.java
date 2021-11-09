@@ -69,10 +69,7 @@ public class Drivetrain_only extends OpMode
     private DcMotor rightFrontWheel;
     private DcMotor leftBackWheel;
     private DcMotor rightBackWheel;
-    private DcMotor elevatorMotor;
-    private DcMotor intakeMotor;
-    private DcMotor carouselMotor;
-    private Servo holderServo;
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
