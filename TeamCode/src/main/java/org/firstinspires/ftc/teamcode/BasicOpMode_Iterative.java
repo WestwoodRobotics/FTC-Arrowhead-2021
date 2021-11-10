@@ -272,7 +272,7 @@ public class BasicOpMode_Iterative extends OpMode
             rightFrontPower = -0.3;
             rightBackPower = -0.3;
         }
-
+        // Change da world. my final nessage. goodby e
         // Send calculated power to wheels
         leftFrontWheel.setPower(leftFrontPower);
         rightFrontWheel.setPower(rightFrontPower);

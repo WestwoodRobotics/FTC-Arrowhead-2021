@@ -61,7 +61,7 @@ remove @overides
 
 @TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
 
-public class Drivetrain_only extends OpMode
+public class DrivetrainOnly extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -80,10 +80,10 @@ public class Drivetrain_only extends OpMode
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftFrontWheel  = hardwareMap.get(DcMotor.class, "left_front");
-        rightFrontWheel = hardwareMap.get(DcMotor.class, "right_front");
-        leftBackWheel = hardwareMap.get(DcMotor.class, "left_back");
-        rightBackWheel = hardwareMap.get(DcMotor.class, "right_back");
+        leftFrontWheel  = hardwareMap.get(DcMotor.class, "leftFrontWheel");
+        rightFrontWheel = hardwareMap.get(DcMotor.class, "rightFrontWheel");
+        leftBackWheel = hardwareMap.get(DcMotor.class, "leftBackWheel");
+        rightBackWheel = hardwareMap.get(DcMotor.class, "rightBackWheel");
 
         //TODO: add max and min values for servo
         // Most robots need the motor on one side to be reversed to drive forward
@@ -136,35 +136,35 @@ public class Drivetrain_only extends OpMode
 
         //double elevatorHeight = elevatorMotor.getCurrentPosition(); TODO: test position values
 
-        leftFrontPower    = forwardBackward + turning + straifing;
-        rightFrontPower   = forwardBackward - turning - straifing;
-        leftBackPower     = forwardBackward + turning - straifing;
-        rightBackPower    = forwardBackward - turning + straifing;
+        leftFrontPower    = forwardBackward - turning + straifing;
+        rightFrontPower   = forwardBackward + turning - straifing;
+        leftBackPower     = forwardBackward - turning - straifing;
+        rightBackPower    = forwardBackward + turning + straifing;
         double[] powVals = {abs(leftFrontPower), abs(rightFrontPower), abs(leftBackPower), abs(rightBackPower)};
         Arrays.sort(powVals);
         if ((abs(leftFrontPower)) > 1 || (abs(rightFrontPower)) > 1 || (abs(leftBackPower) > 1) || (abs(rightBackPower) > 1))    {
-             double maxPower = powVals[3];
-             leftFrontPower    /= maxPower;
-             rightFrontPower   /= maxPower;
-             leftBackPower     /= maxPower;
-             rightBackPower    /= maxPower;
-              }
+            double maxPower = powVals[3];
+            leftFrontPower    /= maxPower;
+            rightFrontPower   /= maxPower;
+            leftBackPower     /= maxPower;
+            rightBackPower    /= maxPower;
+        }
 
 
 
 
 
         if (gamepad1.left_trigger > 0) {
-            leftFrontPower = -0.3;
-            leftBackPower = -0.3;
-            rightFrontPower = 0.3;
-            rightBackPower = 0.3;
-        }
-        else if (gamepad1.right_trigger > 0) {
             leftFrontPower = 0.3;
             leftBackPower = 0.3;
             rightFrontPower = -0.3;
             rightBackPower = -0.3;
+        }
+        else if (gamepad1.right_trigger > 0) {
+            leftFrontPower = -0.3;
+            leftBackPower = -0.3;
+            rightFrontPower = 0.3;
+            rightBackPower = 0.3;
         }
 
         // Send calculated power to wheels
@@ -174,8 +174,8 @@ public class Drivetrain_only extends OpMode
         rightBackWheel.setPower(rightBackPower);
 
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-                            //TODO: fix the following line to work with mecanum done?
-        telemetry.addData("Motors", "left_front (%.2f), right_front (%.2f)", "left_back (%.2f)", "right_back (%.2f)", leftFrontPower, rightFrontPower, leftBackPower, rightBackPower);
+        //TODO: fix the following line to work with mecanum done?
+        telemetry.addData("Motors", "leftFrontWheel (%.2f), rightFrontWheel (%.2f), leftBackWheel (%.2f), rightBackWheel (%.2f)", leftFrontWheel.getPower(), rightFrontWheel.getPower(), leftBackWheel.getPower(), rightBackWheel.getPower());
 
         /*
         gamepad1.dpad_direction
