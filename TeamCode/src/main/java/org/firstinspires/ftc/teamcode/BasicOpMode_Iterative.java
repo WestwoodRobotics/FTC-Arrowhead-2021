@@ -218,7 +218,7 @@ public class BasicOpMode_Iterative extends OpMode
             elevatorPower = 0.25;
         }
         else {
-            elevatorPower = 0;
+            elevatorPower.setZeroPowerBehavior(DCMotorEX.ZeroPowerBehavior.BRAKE);
         }
 
 
@@ -250,14 +250,14 @@ public class BasicOpMode_Iterative extends OpMode
             intakePower = 1;
         }
         else if (gamepad2.right_bumper){
-            intakePower = 0;
+            intakeMotor.setZeroPowerBehavior(DCMotorEX.ZeroPowerBehavior.BRAKE);
         }
         if(gamepad2.a){
-            carouselPower = 1;
+            carouselPower = 0.65;
+        else if(gamepad2.b){
+            carouselMotor.setZeroPowerBehavior(DCMotorEX.ZeroPowerBehavior.BRAKE);
         }
-        if(gamepad2.b){
-            carouselPower = 0;
-        }
+        
 
 
         if (gamepad1.left_trigger > 0) {
@@ -294,7 +294,7 @@ public class BasicOpMode_Iterative extends OpMode
     /*
      * Code to run ONCE after the driver hits STOP
      */
-
+// change to the set power BRAKE thing??
     public void stop() {
         leftFrontWheel.setPower(0);
         rightFrontWheel.setPower(0);
