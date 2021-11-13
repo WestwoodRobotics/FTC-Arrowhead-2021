@@ -71,6 +71,8 @@ public class DrivetrainOnly extends OpMode
     private DcMotorEX leftBackWheel;
     private DcMotorEX rightBackWheel;
     private DcMotorEX carouselMotor;
+    private Servo holderServo;
+    private DcMotorEX elevatorMotor;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -87,6 +89,8 @@ public class DrivetrainOnly extends OpMode
         leftBackWheel = hardwareMap.get(DcMotorEX.class, "leftBackWheel");
         rightBackWheel = hardwareMap.get(DcMotorEX.class, "rightBackWheel");
         carouselMotor = hardwareMap.get(DcMotorEX.class, "carouselMotor");
+        holderServo = hardwareMap.get(DcMotorEx.class, "holderServo");
+        elevatorMotor = hardwareMap.get(DcMotorEx.class, "elevatorMotor");
 
         //TODO: add max and min values for servo
         // Most robots need the motor on one side to be reversed to drive forward
@@ -96,6 +100,8 @@ public class DrivetrainOnly extends OpMode
         leftBackWheel.setDirection(DcMotorEX.Direction.FORWARD);
         rightBackWheel.setDirection(DcMotorEX.Direction.REVERSE);
         carouselMotor.setDirection(DcMotorEX.Direction.FORWARD);
+        holderServo.setDirection(Servo.Direction.FORWARD);
+        elevatorMotor.setDirection(DcMotorEx.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -166,8 +172,30 @@ public class DrivetrainOnly extends OpMode
         }
 
 
-
-
+        if(gamepad2.left_bumper == True) {
+            holderServo.setPosition(0.25);
+        else if(gamepad2.right_bumper == True){
+            holderServo.setPosition(0.0);
+        
+        
+        
+        if (gamepad2.dpad_up) {
+            elevatorPower = 0.75;
+        }
+        else if (gamepad2.dpad_down) {
+            elevatorPower = -0.75;
+        }
+        else if (gamepad2.dpad_left) {
+            elevatorPower = -0.25;
+        }
+        else if (gamepad2.dpad_right) {
+            elevatorPower = 0.25;
+        }
+        else {
+            elevatorPower.setZeroPowerBehavior(DCMotorEX.ZeroPowerBehavior.BRAKE);
+        }
+        
+        
 
         if (gamepad1.left_trigger > 0) {
             leftFrontPower = 0.3;
@@ -209,6 +237,7 @@ public class DrivetrainOnly extends OpMode
         leftBackWheel.setPower(0);
         carouselMotor.setPower(0);
         rightBackWheel.setPower(0);
+        
 
     }
 
