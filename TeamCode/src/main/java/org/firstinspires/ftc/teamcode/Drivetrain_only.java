@@ -145,7 +145,7 @@ public class DrivetrainOnly extends OpMode
 
 
         if(gamepad2.left_bumper == true) {
-            holderServo.setPosition(0.25);
+            holderServo.setPosition(0.5);
             }
         else if(gamepad2.right_bumper == true){
             holderServo.setPosition(0.0);
