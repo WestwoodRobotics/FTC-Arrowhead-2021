@@ -27,25 +27,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 //done other than testing?
+
 import static java.lang.Math.abs;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import java.util.*;
+
+
+import java.util.Arrays;
 /*
 TODOs:
 remove @overides
  */
-*/
- */
+
+
 /**
  * This file contains an example of an iterative (Non-Linear) "OpMode".
  * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
@@ -62,18 +62,16 @@ remove @overides
 
 @TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
 
-public class BasicOpMode_Iterative extends OpMode
+public class DrivetrainOnly extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftFrontWheel;
-    private DcMotor rightFrontWheel;
-    private DcMotor leftBackWheel;
-    private DcMotor rightBackWheel;
-    private DcMotor elevatorMotor;
-    private DcMotor intakeMotor;
-    private DcMotor carouselMotor;
-    private Servo holderServo;
+    private DcMotorEx leftFrontWheel;
+    private DcMotorEx rightFrontWheel;
+    private DcMotorEx leftBackWheel;
+    private DcMotorEx rightBackWheel;
+    private DcMotorEx carouselMotor;
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -84,24 +82,20 @@ public class BasicOpMode_Iterative extends OpMode
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftFrontWheel  = hardwareMap.get(DcMotor.class, "left_front");
-        rightFrontWheel = hardwareMap.get(DcMotor.class, "right_front");
-        leftBackWheel = hardwareMap.get(DcMotor.class, "left_back");
-        rightBackWheel = hardwareMap.get(DcMotor.class, "right_back");
-        elevatorMotor = hardwareMap.get(DcMotor.class, "elevator");
-        intakeMotor = hardwareMap.get(DcMotor.class, "intake");
-        carouselMotor = hardwareMap.get(DcMotor.class, "carousel");
-        holderServo = hardwareMap.get(Servo.class, "holder")//TODO:wrong?
+        leftFrontWheel  = hardwareMap.get(DcMotorEx.class, "leftFrontWheel");
+        rightFrontWheel = hardwareMap.get(DcMotorEx.class, "rightFrontWheel");
+        leftBackWheel = hardwareMap.get(DcMotorEx.class, "leftBackWheel");
+        rightBackWheel = hardwareMap.get(DcMotorEx.class, "rightBackWheel");
+        carouselMotor = hardwareMap.get(DcMotorEx.class, "carouselMotor");
+
         //TODO: add max and min values for servo
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftFrontWheel.setDirection(DcMotor.Direction.FORWARD);
-        rightFrontWheel.setDirection(DcMotor.Direction.REVERSE);
-        leftBackWheel.setDirection(DcMotor.Direction.FORWARD);
-        rightBackWheel.setDirection(DcMotor.Direction.REVERSE);
-        elevatorMotor.setDirection(DcMotor.Direction.FORWARD);
-        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
-        carouselMotor.setDirection(DcMotor.Direction.FORWARD);
+        leftFrontWheel.setDirection(DcMotorEx.Direction.FORWARD);
+        rightFrontWheel.setDirection(DcMotorEx.Direction.REVERSE);
+        leftBackWheel.setDirection(DcMotorEx.Direction.FORWARD);
+        rightBackWheel.setDirection(DcMotorEx.Direction.REVERSE);
+        carouselMotor.setDirection(DcMotorEx.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -132,157 +126,76 @@ public class BasicOpMode_Iterative extends OpMode
         double rightFrontPower;
         double leftBackPower;
         double rightBackPower;
-        double elevatorPower;
-        double intakePower;//TODO: servo power? and intake toggleablle
         double carouselPower;
+
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
 
         // POV Mode uses left stick to go forward, and right stick to turn.
         // - This uses basic math to combine motions and is easier to drive straight.
-        double forwardBackward = -gamepad1.left_stick_y;
-        double straifing =  gamepad1.left_stick_x;
+        double forwardBackward = gamepad1.left_stick_y;
+        double straifing =  -gamepad1.left_stick_x;
         double turning = gamepad1.right_stick_x;
 
 
         //double elevatorHeight = elevatorMotor.getCurrentPosition(); TODO: test position values
-        int elevatorPos = 1;
-        int seudoPID = 1;
-        /*if (gamepad1.dpad_up == true){
-            seudoPID = 1;
-            elevatorMotor.setTargetPosition(1/TODO:put target position number*);
-            while (elevatorMotor.getCurrentPosition() != /TODO:put target posotion number){
-                while (elevatorMotor.getCurrentPosition() < /*TODO: put target postition) {
-                    elevatorMotor.setPower(1/seudoPID);//TODO:dont tell me this is getting to PID
-                    suedoPID++;
-                }
-                while (elevatorMotor.getCurrentPosition() > /*TODO: put target position){
-                    elevatorMotor.setPower(-1/seudoPID);
-                    seudoPID++;
-                }
-                if(seudoPID > 10){
-                    break;
-                }
-            }
-            elevatorMotor.setPower(0);
 
-        }
-        if (gamepad1.dpad_right == true){
-            seudoPID = 1;
-            elevatorMotor.setTargetPosition(1/*TODO:put target position number);
-            while (elevatorMotor.getCurrentPosition() != /*TODO:put target posotion number){
-                while (elevatorMotor.getCurrentPosition() < /*TODO: put target postition) {
-                    elevatorMotor.setPower(1/seudoPID);//TODO:dont tell me this is getting to PID
-                    seudoPID++;
-                }
-                while (elevatorMotor.getCurrentPosition() > /*TODO: put target position){
-                    elevatorMotor.setPower(-1/seudoPID);
-                    seudoPID++;//pstupid
-                }
-                if(seudoPID > 10){
-                    break;
-                }
-            }
-            elevatorMotor.setPower(0);
-        }
-        if (gamepad1.dpad_left == true){
-            seudoPID = 1;
-            elevatorMotor.setTargetPosition(1/*TODO:put target position number);
-            while (elevatorMotor.getCurrentPosition() != /*TODO:put target posotion number){
-                while (elevatorMotor.getCurrentPosition() < /*TODO: put target postition) {
-                    elevatorMotor.setPower(1)/seudoPID;//TODO:dont tell me this is getting to PID
-                    seudoPID++;
-                }
-                while (elevatorMotor.getCurrentPosition() > /*TODO: put target position){
-                    elevatorMotor.setPower(-1/seudoPID);
-                    seudoPID++;
-                }
-                if(seudoPID > 10){
-                    break;
-                }
-            }
-            elevatorMotor.setPower(0);
-        }
-        */
-
-        if (gamepad2.dpad_up) {
-            elevatorPower = 0.75;
-        }
-        else if (gamepad2.dpad_down) {
-            elevatorPower = -0.75;
-        }
-        else if (gamepad2.dpad_left) {
-            elevatorPower = -0.25;
-        }
-        else if (gamepad2.dpad_right) {
-            elevatorPower = 0.25;
-        }
-        else {
-            elevatorPower.setZeroPowerBehavior(DCMotorEX.ZeroPowerBehavior.BRAKE);
-        }
-
-
-
-
-
-        leftFrontPower    = forwardBackward + turning + straifing;
-        rightFrontPower   = forwardBackward - turning - straifing;
-        leftBackPower     = forwardBackward + turning - straifing;
-        rightBackPower    = forwardBackward - turning + straifing;
+        leftFrontPower    = forwardBackward - turning + straifing;
+        rightFrontPower   = forwardBackward + turning - straifing;
+        leftBackPower     = forwardBackward - turning - straifing;
+        rightBackPower    = forwardBackward + turning + straifing;
         double[] powVals = {abs(leftFrontPower), abs(rightFrontPower), abs(leftBackPower), abs(rightBackPower)};
         Arrays.sort(powVals);
         if ((abs(leftFrontPower)) > 1 || (abs(rightFrontPower)) > 1 || (abs(leftBackPower) > 1) || (abs(rightBackPower) > 1))    {
-             double maxPower = powVals[3];
-             leftFrontPower    /= maxPower;
-             rightFrontPower   /= maxPower;
-             leftBackPower     /= maxPower;
-             rightBackPower    /= maxPower;
-              }
+            double maxPower = powVals[3];
+            leftFrontPower    /= maxPower;
+            rightFrontPower   /= maxPower;
+            leftBackPower     /= maxPower;
+            rightBackPower    /= maxPower;
+        }
+        if(forwardBackward == 0 && straifing == 0 && turning == 0){
+            leftFrontWheel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+            rightFrontWheel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+            leftBackWheel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+            rightBackWheel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        }
+        if(gamepad1.a){
+            carouselMotor.setPower(0.15);
+        }
+        else if (gamepad1.y){
+            carouselMotor.setPower(-0.15);
+
+        }
+        else if(gamepad1.b){
+            carouselMotor.setPower(0);
+        }
 
 
-        if (gamepad2.a) {
-            holderServo.setPosition(0.25/*TODO: put correct numbers*/);
-        }
-        else if (gamepad2.y) {
-            holderServo.setPosition(0.75/*TODO: put correct number*/);
-        }
-        if (gamepad2.left_bumper){
-            intakePower = 1;
-        }
-        else if (gamepad2.right_bumper){
-            intakeMotor.setZeroPowerBehavior(DCMotorEX.ZeroPowerBehavior.BRAKE);
-        }
-        if(gamepad2.a){
-            carouselPower = 0.65;
-        else if(gamepad2.b){
-            carouselMotor.setZeroPowerBehavior(DCMotorEX.ZeroPowerBehavior.BRAKE);
-        }
-        
+
 
 
         if (gamepad1.left_trigger > 0) {
-            leftFrontPower = -0.3;
-            leftBackPower = -0.3;
-            rightFrontPower = 0.3;
-            rightBackPower = 0.3;
-        }
-        else if (gamepad1.right_trigger > 0) {
             leftFrontPower = 0.3;
             leftBackPower = 0.3;
             rightFrontPower = -0.3;
             rightBackPower = -0.3;
         }
-        // Change da world. my final nessage. goodby e
+        else if (gamepad1.right_trigger > 0) {
+            leftFrontPower = -0.3;
+            leftBackPower = -0.3;
+            rightFrontPower = 0.3;
+            rightBackPower = 0.3;
+        }
+
         // Send calculated power to wheels
         leftFrontWheel.setPower(leftFrontPower);
         rightFrontWheel.setPower(rightFrontPower);
         leftBackWheel.setPower(leftBackPower);
         rightBackWheel.setPower(rightBackPower);
-//        intakeMotor.setPower(intakePower);
-        carouselMotor.setPower(carouselPower);
+
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-                            //TODO: fix the following line to work with mecanum done?
-        telemetry.addData("Motors", "left_front (%.2f), right_front (%.2f)", "left_back (%.2f)", "right_back (%.2f)", leftFrontPower, rightFrontPower, leftBackPower, rightBackPower);
+        //TODO: fix the following line to work with mecanum done?
+        telemetry.addData("Motors", "leftFrontWheel (%.2f), rightFrontWheel (%.2f), leftBackWheel (%.2f), rightBackWheel (%.2f)", leftFrontWheel.getPower(), rightFrontWheel.getPower(), leftBackWheel.getPower(),rightBackWheel.getPower());
 
         /*
         gamepad1.dpad_direction
@@ -294,15 +207,14 @@ public class BasicOpMode_Iterative extends OpMode
     /*
      * Code to run ONCE after the driver hits STOP
      */
-// change to the set power BRAKE thing??
+
     public void stop() {
         leftFrontWheel.setPower(0);
         rightFrontWheel.setPower(0);
         leftBackWheel.setPower(0);
-        rightBackWheel.setPower(0);
-        elevatorMotor.setPower(0);
-        intakeMotor.setPower(0);
         carouselMotor.setPower(0);
+        rightBackWheel.setPower(0);
+
     }
 
     public void wait (double seconds) {
@@ -320,3 +232,4 @@ public class BasicOpMode_Iterative extends OpMode
          */
     }
 }
+66666666b

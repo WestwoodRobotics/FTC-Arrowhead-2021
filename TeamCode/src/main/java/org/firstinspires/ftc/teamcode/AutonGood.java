@@ -34,7 +34,7 @@ import static java.lang.Math.abs;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorEX;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -60,17 +60,17 @@ remove @overides
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
+@Autonomous(name="Auton", group="Iterative Opmode")
 
 public class DrivetrainOnly extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotorEX leftFrontWheel;
-    private DcMotorEX rightFrontWheel;
-    private DcMotorEX leftBackWheel;
-    private DcMotorEX rightBackWheel;
-    private DcMotorEX carouselMotor;
+    private DcMotorEx leftFrontWheel;
+    private DcMotorEx rightFrontWheel;
+    private DcMotorEx leftBackWheel;
+    private DcMotorEx rightBackWheel;
+    private DcMotorEx carouselMotor;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -82,20 +82,20 @@ public class DrivetrainOnly extends OpMode
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftFrontWheel  = hardwareMap.get(DcMotorEX.class, "leftFrontWheel");
-        rightFrontWheel = hardwareMap.get(DcMotorEX.class, "rightFrontWheel");
-        leftBackWheel = hardwareMap.get(DcMotorEX.class, "leftBackWheel");
-        rightBackWheel = hardwareMap.get(DcMotorEX.class, "rightBackWheel");
-        carouselMotor = hardwareMap.get(DcMotorEX.class, "carouselMotor");
+        leftFrontWheel  = hardwareMap.get(DcMotorEx.class, "leftFrontWheel");
+        rightFrontWheel = hardwareMap.get(DcMotorEx.class, "rightFrontWheel");
+        leftBackWheel = hardwareMap.get(DcMotorEx.class, "leftBackWheel");
+        rightBackWheel = hardwareMap.get(DcMotorEx.class, "rightBackWheel");
+        carouselMotor = hardwareMap.get(DcMotorEx.class, "carouselMotor");
 
         //TODO: add max and min values for servo
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftFrontWheel.setDirection(DcMotorEX.Direction.FORWARD);
-        rightFrontWheel.setDirection(DcMotorEX.Direction.REVERSE);
-        leftBackWheel.setDirection(DcMotorEX.Direction.FORWARD);
-        rightBackWheel.setDirection(DcMotorEX.Direction.REVERSE);
-        carouselMotor.setDirection(DcMotorEX.Direction.FORWARD);
+        leftFrontWheel.setDirection(DcMotorEx.Direction.FORWARD);
+        rightFrontWheel.setDirection(DcMotorEx.Direction.REVERSE);
+        leftBackWheel.setDirection(DcMotorEx.Direction.FORWARD);
+        rightBackWheel.setDirection(DcMotorEx.Direction.REVERSE);
+        carouselMotor.setDirection(DcMotorEx.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -132,10 +132,14 @@ public class DrivetrainOnly extends OpMode
         // Comment out the method that's not used.  The default below is POV.
 
         // POV Mode uses left stick to go forward, and right stick to turn.
-        // - This uses basic math to combine motions and is easier to drive straight.
-        double forwardBackward = gamepad1.left_stick_y;
-        double straifing =  -gamepad1.left_stick_x;
-        double turning = gamepad1.right_stick_x;
+        // - This uses basic math to combine motions and is easier to drive straight.4
+        final double sirconference = 0.299236638;
+        double x;//meters (bottom right = 0) (starting = 0)
+        double y;//meters//11.78097 (-.32 = starting)
+        double orientation
+        double forwardBackward;
+        double straifing;
+        double turning;
 
 
         //double elevatorHeight = elevatorMotor.getCurrentPosition(); TODO: test position values
@@ -153,7 +157,12 @@ public class DrivetrainOnly extends OpMode
             leftBackPower     /= maxPower;
             rightBackPower    /= maxPower;
         }
-
+        if(forwardBackward == 0 && straifing == 0 && turning == 0){
+            leftFrontWheel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+            rightFrontWheel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+            leftBackWheel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+            rightBackWheel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        }
         if(gamepad1.a){
             carouselMotor.setPower(0.15);
         }
@@ -227,3 +236,4 @@ public class DrivetrainOnly extends OpMode
          */
     }
 }
+66666666b
