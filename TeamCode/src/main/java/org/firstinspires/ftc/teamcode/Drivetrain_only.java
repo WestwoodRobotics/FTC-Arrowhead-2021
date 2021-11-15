@@ -93,8 +93,8 @@ public class DrivetrainOnly extends OpMode
 
         // POV Mode uses left stick to go forward, and right stick to turn.
         // - This uses basic math to combine motions and is easier to drive straight.
-        double forwardBackward = gamepad1.left_stick_y;
-        double straifing =  -gamepad1.left_stick_x;
+        double forwardBackward = -gamepad1.left_stick_y;
+        double straifing =  gamepad1.left_stick_x;
         double turning = gamepad1.right_stick_x;
 
 
@@ -127,11 +127,12 @@ public class DrivetrainOnly extends OpMode
 
 
         if(gamepad2.right_bumper == true) {
-            holderServo.setPosition(0.5);
+            holderServo.setPosition(0.6);
             }
         else if(gamepad2.left_bumper == true){
             holderServo.setPosition(1.0);
             }
+        else if(gamepad2.x == true){ holderServo.setPOsition(0.4)
         
         
         
@@ -147,7 +148,7 @@ public class DrivetrainOnly extends OpMode
         else if (gamepad2.dpad_right) {
             elevatorMotor.setPower(0.25);
         }
-        else if (gamepad2.x) {
+        else {
             elevatorMotor.setPower(0.0);
         }
         
