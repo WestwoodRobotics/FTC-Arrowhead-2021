@@ -106,6 +106,8 @@ public class DrivetrainOnly extends OpMode
      */
     @Override
     public void init_loop() {
+        double x = -.32;//meters (bottom right = 0)
+        double y 0.0;//meters//11.78097
     }
 
     /*
@@ -134,8 +136,7 @@ public class DrivetrainOnly extends OpMode
         // POV Mode uses left stick to go forward, and right stick to turn.
         // - This uses basic math to combine motions and is easier to drive straight.4
         final double sirconference = 0.299236638;
-        double x;//meters (bottom right = 0) (starting = 0)
-        double y;//meters//11.78097 (-.32 = starting)
+
         double orientation
         double forwardBackward;
         double straifing;

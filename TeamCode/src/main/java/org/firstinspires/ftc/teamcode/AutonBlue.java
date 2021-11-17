@@ -38,7 +38,7 @@ remove @overides
 
 @Autonomous(name="Auton", group="Iterative Opmode")
 
-public class Auton extends OpMode
+public class AutonBlue extends LinearOpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
