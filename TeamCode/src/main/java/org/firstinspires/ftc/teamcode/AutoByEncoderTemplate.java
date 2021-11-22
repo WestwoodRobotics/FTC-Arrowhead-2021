@@ -175,9 +175,10 @@ public class Auton extends LinearOpMode {
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
+
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (leftFrontMotor.isBusy() && rightFrontMotor.isBusy())) {
+                    (leftFrontMotor.isBusy() || rightFrontMotor.isBusy())) {
 
                 // Display it for the driver.
                 telemetry.addData("Parth1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
