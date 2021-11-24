@@ -10,7 +10,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.lang.Math;
 
 @Autonomous(name="Pushbot: Auto Drive By Encoder", group="Iterative Opmode")
+
 https://www.windows93.net/ 
+https://docs.google.com/document/d/1tyWrXDfMidwYyP_5H4mZyVgaEswhOC35gvdmP-V-5hA/edit
+
 TODO-LIST:
 |-------------------------------------------------------|                     
 |*make PID                                              |  
@@ -284,7 +287,7 @@ public class Auton extends LinearOpMode {
       resetEncodersAfterMovementComplete();//waits until movement is complete, then resets all encoders
     } else if (forwardBackwardInches < 0){//if movement is set to backwards
       setAllTargets(forwardBackwardInches);
-      setAllPower(-speed);
+      setAllPower(-speed);                                     // apparently RUN_TO_POSITION moves the thing to the right place, accounts for the negative already. May have to change this
       runToPos();
       resetEncodersAfterMovementComplete();
     } 
@@ -299,7 +302,9 @@ public class Auton extends LinearOpMode {
       runToPos;
       resetEncodersAfterMovementComplete();
     }
-
+    
+    public void elevatorLevel(int level) {
+      
 
 
       
