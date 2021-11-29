@@ -66,6 +66,7 @@ public class Auton extends LinearOpMode {
     double mecanumPower;
     double destinationFeet;
     double currentPositionFeet;
+/*
     public void PID(){
         while (opModeIsActive()){
             PIDTime.reset();
@@ -98,6 +99,8 @@ public class Auton extends LinearOpMode {
     // I function
 
     // placeholder
+*/
+    leftFrontMotor.setPIDFCoefficients(1,2,3,)
 
 
 
@@ -222,79 +225,93 @@ public class Auton extends LinearOpMode {
         leftBackMotor.setPower(power);
     }
     public void encoderDrive(double speed, double forwardBackwardFoots, double sidewaysFoots, double timeoutS) {
-        if (forwardBackwardFoots > 0){//if movement is set to forwards
-            //setAllTargets(forwardBackwardFoots);//sets the targets for all wheels//setAllPower(PID(speed))
+        if (forwardBackwardFoots > 0) {//if movement is set to forwards
+            setAllTargets(forwardBackwardFoots);//sets the targets for all wheels//setAllPower(PID(speed))
             destinationFeet = forwardBackwardFoots;
-            while(currentPositionFeet > forwardBackwardFoots -.05 && < forwardBackwardsFoots + .05){
-                setAllPower(mecanumPower);//sets the power
-            }
-            //runToPos();//turns on run to position for all wheels
-            //resetEncodersAfterMovementComplete();//waits until movement is complete, then resets all encoders
-        } else if (forwardBackwardFoots < 0){//if movement is set to backwards
-            //setAllTargets(forwardBackwardFoots);
-            while(currentPositionFeet > forwardBackwardFoots +.05 && < forwardBackwardsFoots - .05){
-                setAllPower(-mecanumPower);//sets the power
-            }                                   // apparently RUN_TO_POSITION moves the thing to the right place, accounts for the negative already. May have to change this
-            //runToPos();
-            //resetEncodersAfterMovementComplete();
+            //while(currentPositionFeet > forwardBackwardFoots -.05 && < forwardBackwardsFoots + .05){
+            //    setAllPower(mecanumPower);//sets the power
+            //}
+            runToPos();//turns on run to position for all wheels
+            resetEncodersAfterMovementComplete();//waits until movement is complete, then resets all encoders
+        } else if (forwardBackwardFoots < 0) {//if movement is set to backwards
+            setAllTargets(forwardBackwardFoots);
+            //while(currentPositionFeet > forwardBackwardFoots +.05 && < forwardBackwardsFoots - .05){
+            //    setAllPower(-mecanumPower);//sets the power
+            //}                                   // apparently RUN_TO_POSITION moves the thing to the right place, accounts for the negative already. May have to change this
+            runToPos();
+            resetEncodersAfterMovementComplete();
         }
-        if (sidewaysFoots > 0){//if movement is right
-            //mecanumTargets(sidewaysFoots);//sets the targets according to mecanum for all wheels
-            while (currentPositionFeet > sidewaysFoots - .05 && currentPositionFeet < sidewaysFoots + .05){
-                straif(mecanumPower);//sets the power according to mecanum
-            }
-            //runToPos();//turns on run to position for all wheels
-            //resetEncodersAfterMovementComplete();// reset all econders once movement is complete
-        } else if (sidewaysFoots < 0){
-            //mecanumTargets(sidewaysFoots);
-            while(currentPositionFeet > forwardBackwardFoots +.05 && < forwardBackwardsFoots - .05){
-                setAllPower(-mecanumPower);//sets the power
-            }
-            //runToPos;
-            //resetEncodersAfterMovementComplete();
+        if (sidewaysFoots > 0) {//if movement is right
+            mecanumTargets(sidewaysFoots);//sets the targets according to mecanum for all wheels
+            //while (currentPositionFeet > sidewaysFoots - .05 && currentPositionFeet < sidewaysFoots + .05){
+            //    straif(mecanumPower);//sets the power according to mecanum
+            //}
+            runToPos();//turns on run to position for all wheels
+            resetEncodersAfterMovementComplete();// reset all econders once movement is complete
+        } else if (sidewaysFoots < 0) {
+            mecanumTargets(sidewaysFoots);
+            //while(currentPositionFeet > forwardBackwardFoots +.05 && < forwardBackwardsFoots - .05){
+            //    setAllPower(-mecanumPower);//sets the power
+            //}
+            runToPos;
+            resetEncodersAfterMovementComplete();
         }
-        public void rotate(double degree){//degree = DISTANCE (- or +) that you want to turn, not destination of turning
-            if(degree > orientation){
-                while (orientation < degree){
-
-                    mecanumTurning(PID(distancePerDegTurned));
-                    orientation += (encoderToMeters()/disByWheelPerDegTurned);
-                }
-                //rightBackWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-            }
-            else if (degree < orientation){
-                while (orientation > degree){
-                    mecanumTurning(PID(distancePerDegTurned));
-                    orientation += (encoderToMeters()/disByWheelPerDegTurned);
-                }
-
-                //rightBackWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);//TODO: I think the syntax is wrong in this line and other identical ones
-
-            }
-            public void elevatorLevel(int level) {
-
-
-
-
-                while (opModeIsActive() && (runtime.seconds() < timeoutS) &&  (leftFrontMotor.isBusy() || rightFrontMotor.isBusy() || leftBackMotor.isBusy() || rightBackMotor.isBusy())) {
-
-                    // Display it for the driver.
-                    telemetry.addData("Parth2",  "Running at %7d :%7d", leftFrontMotor.getCurrentPosition(),rightFrontMotor.getCurrentPosition());
-                    telemetry.update();
-                }
-
-                // Stop all motion;
-                leftFrontMotor.setPower(0);
-                rightBackMotor.setPower(0);
-                leftBackMotor.setPower(0);
-                rightFrontMotor.setPower(0);
-                // Turn off RUN_TO_POSITION
-                leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                leftBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            }
+        public void turnTargets ( double degree){
+            leftFrontMotor.setTargetPosition(distancePerDegTurned * degree);
+            rightFrontMotor.setTargetPosition(-distancePerDegTurned * degree);
+            leftBackMotor.setTargetPosition(distancePerDegTurned * degree);
+            rightBackMotor.setTargetPostion(-distancePerDegTurned * degree);
         }
-    }
+        public void rotate ( double degree)
+        {//degree = DISTANCE (- or +) that you want to turn, not destination of turning
+
+            if (degree > orientation) {
+                while (orientation < degree + 1) {
+                    turnTargets(degree);
+                    mecanumTurning(.3);
+                    runToPos();
+                    orientation += (encoderToMeters() / disByWheelPerDegTurned);
+                }
+                setAllPower(0);
+                resetEncodersAfterMovementComplete();
+
+
+            } else if (degree < orientation) {
+                while (orientation > degree - 1) {
+                    turnTargets(degree);
+                    mecanumTurning(.3);
+                    runToPos();
+                    orientation += (encoderToMeters() / disByWheelPerDegTurned);
+                }
+                setAllPower(0);
+
+                resetEncodersAfterMovementComplete();
+            }
+
+            public void elevatorLevel ( int level){
+
+            while (opModeIsActive() && (runtime.seconds() < timeoutS) && (leftFrontMotor.isBusy() || rightFrontMotor.isBusy() || leftBackMotor.isBusy() || rightBackMotor.isBusy())) {
+
+                // Display it for the driver.
+                telemetry.addData("Parth2", "Running at %7d :%7d", leftFrontMotor.getCurrentPosition(), rightFrontMotor.getCurrentPosition());
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            leftFrontMotor.setPower(0);
+            rightBackMotor.setPower(0);
+            leftBackMotor.setPower(0);
+            rightFrontMotor.setPower(0);
+            // Turn off RUN_TO_POSITION
+            leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+
+    public void theParth() {
+        encoderDrive(.7, 4, 0, 1);
+        rotate(90);
+        }
+
+
