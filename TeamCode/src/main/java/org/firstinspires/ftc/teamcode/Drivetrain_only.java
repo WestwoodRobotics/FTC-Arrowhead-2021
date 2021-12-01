@@ -45,6 +45,7 @@ public class DrivetrainOnly extends OpMode
         carouselMotor = hardwareMap.get(DcMotorEx.class, "carouselMotor");
         holderServo = hardwareMap.get(Servo.class, "holderServo");
         elevatorMotor = hardwareMap.get(DcMotorEx.class, "elevatorMotor");
+        intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
 
         //TODO: add max and min values for servo
         // Most robots need the motor on one side to be reversed to drive forward
@@ -56,6 +57,7 @@ public class DrivetrainOnly extends OpMode
         carouselMotor.setDirection(DcMotorEx.Direction.FORWARD);
         holderServo.setDirection(Servo.Direction.FORWARD);
         elevatorMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -134,7 +136,16 @@ public class DrivetrainOnly extends OpMode
             }
         else if(gamepad2.x == true){ holderServo.setPOsition(0.4)
         
-        
+        if(gamepad2.a) {
+            intakeMotor.setPower(0.7);
+            }
+        else if(gamepad2.y) {
+            intakeMotor.setPower(0);
+            }
+        else if(gamepad2.b) {
+            intakeMotor.setPower(-0.7);
+            }
+            
         
         if (gamepad2.dpad_up) {
             elevatorMotor.setPower(0.75);
