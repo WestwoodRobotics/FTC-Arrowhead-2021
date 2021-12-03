@@ -16,7 +16,7 @@ TODO-LIST:
 |-------------------------------------------------------|
 |                                                       |
 |*elevator (prepoprepositions) (constant levels)        |
-|*Color Sensor implementation                           |
+|*Color Sensor implementation <-- not happening         |
 |*Intake stuff                                          |
 |*find out how many times code runs per/sec             |
 |-------------------------------------------------------|
@@ -37,6 +37,10 @@ public class Auton extends LinearOpMode {
     static final double     COUNTS_PER_INCH             = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /(WHEEL_SIRCONFERENCE_INCHES);
     static final double     DRIVE_SPEED                 = 0.6;
     static final double     TURN_SPEED                  = 0.5;
+    static final double     ELEVATOR_GEAR_RATIO         = 50.9;
+    static final double     COUNTS_PER_ELEVATOR_REV     = 1425;
+    static final double     MAX_ELEVATOR_CAPABLITY      = TBD;
+    static final double     ELE_TICKS_PER_INCH   = (ELEVATOR_GEAR_RATIO*COUNTS_PER_ELEVATOR_REV)/eleSpoolDiameterInches //someone check my math pls
 
     private DcMotorEx leftFrontMotor;
     private DcMotorEx rightFrontMotor;
@@ -45,6 +49,7 @@ public class Auton extends LinearOpMode {
     private DcMotorEx carouselMotor;
     private Servo holderServo;
     private DcMotorEx elevatorMotor;
+    private DcMOtorEx intakeMotor;
   leftFrontMotor.setDirection(DcMotorEx.Direction.FORWARD);
   rightFrontMotor.setDirection(DcMotorEx.Direction.REVERSE);
   leftBackMotor.setDirection(DcMotorEx.Direction.FORWARD);
@@ -66,6 +71,7 @@ public class Auton extends LinearOpMode {
     double mecanumPower;
     double destinationFeet;
     double currentPositionFeet;
+    final double eleSpoolDiameterInches = 1.49606;
 /*
     public void PID(){
         while (opModeIsActive()){
@@ -100,8 +106,12 @@ public class Auton extends LinearOpMode {
 
     // placeholder
 */
-    leftFrontMotor.setPIDFCoefficients(1,2,3,)
-
+    leftFrontMotor.setPIDFCoefficients(1,2,3);
+    rightFrontMotor.setPIDFCoefficients(1,2,3);
+    leftBackMotor.setPIDFCoefficients(1,2,3);
+    rightBackMotor.setPIDFCoefficients(1,2,3);
+    
+    elevatorMotor.setPIDFCoefficients(1,1,1);
 
 
 
@@ -131,18 +141,27 @@ public class Auton extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-
         // Servo movement based on where the duck/custom game object is on the bar code
+/*
         if (scannerPosition == 1) {
-            servoServingMoverMovement(PLACEHOLDER_TIME, PLACEHOLDER_POSITION);
+            //servoServingMoverMovement(PLACEHOLDER_TIME, PLACEHOLDER_POSITION);
+            elevatorMotor.setPower(.35);
+            elevatorMotor.setTargetPosition(numInches*ELE_TICKS_PER_INCH)
+            elevatorMotor.runToPos();
         }
         else if (scannerPosition == 2) {
-            servoServingMoverMovement(PLACEHOLDER_TIME, PLACEHOLDER_POSITION);
+            //servoServingMoverMovement(PLACEHOLDER_TIME, PLACEHOLDER_POSITION);
+            elevatorMotor.setPower(.35);
+            elevatorMotor.setTargetPosition(numInches*ELE_TICKS_PER_INCH)
+            elevatorMotor.runToPos();
         }
-        else if (scannerPosition == 3) {
-            servoServingMoverMovement(PLACEHOLDER_TIME, PLACEHOLDER_POSITION);
+        else {
+            //servoServingMoverMovement(PLACEHOLDER_TIME, PLACEHOLDER_POSITION);
+            elevatorMotor.setPower(.35);
+            elevatorMotor.setTargetPosition(numInches*ELE_TICKS_PER_INCH)
+            elevatorMotor.runToPos();
         }
-
+*/
 
 
         telemetry.addData("Parth", "Complete");
@@ -192,6 +211,17 @@ public class Auton extends LinearOpMode {
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+    private ElapsedTime intakeTime = new ElapsedTime(ElapsedTime.resolution seconds);
+    public void intakeOn(boolean on, double time, double speed, double forwardBackwardFoots, double sidewaysFoots, double timeoutS){
+        if (on){
+            intakeMotor.setPower(.7);
+        }
+        intakeTime.reset();
+        while(intakeTime < time){
+            encoderDrive(double speed, double forwardBackwardFoots, double sidewaysFoots, double timeoutS);
+        }
+        intakeMotor.setPower(0);
     }
     //this method resets the encoders after waiting until movement is complete
     //implement in order to prevent false encoder readings, which throw off future movement
@@ -288,7 +318,6 @@ public class Auton extends LinearOpMode {
                 resetEncodersAfterMovementComplete();
             }
 
-            public void elevatorLevel ( int level){
 
             while (opModeIsActive() && (runtime.seconds() < timeoutS) && (leftFrontMotor.isBusy() || rightFrontMotor.isBusy() || leftBackMotor.isBusy() || rightBackMotor.isBusy())) {
 
@@ -308,10 +337,12 @@ public class Auton extends LinearOpMode {
             leftBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
+            
 
     public void theParth() {
         encoderDrive(.7, 4, 0, 1);
         rotate(90);
+        
         }
 
 
