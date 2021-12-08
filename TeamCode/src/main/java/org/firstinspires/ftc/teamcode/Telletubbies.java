@@ -8,15 +8,17 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
+
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 import java.util.Arrays;
 
 
-@TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
+@TeleOp(name="Tell E I have ur op", group="Iterative Opmode")
 
-public class DrivetrainOnly extends OpMode
+public class Telletubbies extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -25,8 +27,9 @@ public class DrivetrainOnly extends OpMode
     private DcMotorEx leftBackWheel;
     private DcMotorEx rightBackWheel;
     private DcMotorEx carouselMotor;
-    private Servo holderServo;
+    private CRServo holderServo;
     private DcMotorEx elevatorMotor;
+    private DcMotorEx intakeMotor;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -43,7 +46,7 @@ public class DrivetrainOnly extends OpMode
         leftBackWheel = hardwareMap.get(DcMotorEx.class, "leftBackWheel");
         rightBackWheel = hardwareMap.get(DcMotorEx.class, "rightBackWheel");
         carouselMotor = hardwareMap.get(DcMotorEx.class, "carouselMotor");
-        holderServo = hardwareMap.get(Servo.class, "holderServo");
+        holderServo = hardwareMap.get(CRServo.class, "holderServo");
         elevatorMotor = hardwareMap.get(DcMotorEx.class, "elevatorMotor");
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
 
@@ -52,11 +55,11 @@ public class DrivetrainOnly extends OpMode
         // Reverse the motor that runs backwards when connected directly to the battery
         leftFrontWheel.setDirection(DcMotorEx.Direction.FORWARD);
         rightFrontWheel.setDirection(DcMotorEx.Direction.REVERSE);
-        leftBackWheel.setDirection(DcMotorEx.Direction.FORWARD);
-        rightBackWheel.setDirection(DcMotorEx.Direction.REVERSE);
+        leftBackWheel.setDirection(DcMotorEx.Direction.REVERSE);
+        rightBackWheel.setDirection(DcMotorEx.Direction.FORWARD);
         carouselMotor.setDirection(DcMotorEx.Direction.FORWARD);
-        holderServo.setDirection(Servo.Direction.FORWARD);
-        elevatorMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        holderServo.setDirection(CRServo.Direction.FORWARD);
+        elevatorMotor.setDirection(DcMotorEx.Direction.REVERSE);
         intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
@@ -102,10 +105,10 @@ public class DrivetrainOnly extends OpMode
 
         //double elevatorHeight = elevatorMotor.getCurrentPosition(); TODO: test position values
 
-        leftFrontPower    = forwardBackward - turning + straifing;
-        rightFrontPower   = forwardBackward + turning - straifing;
-        leftBackPower     = forwardBackward - turning - straifing;
-        rightBackPower    = forwardBackward + turning + straifing;
+        leftFrontPower    = 0.8*(forwardBackward - turning - straifing);
+        rightFrontPower   = 0.8*(forwardBackward + turning + straifing);
+        leftBackPower     = 0.8*(forwardBackward + turning - straifing);
+        rightBackPower    = 0.8*(forwardBackward - turning + straifing);
         double[] powVals = {abs(leftFrontPower), abs(rightFrontPower), abs(leftBackPower), abs(rightBackPower)};
         Arrays.sort(powVals);
         if ((abs(leftFrontPower)) > 1 || (abs(rightFrontPower)) > 1 || (abs(leftBackPower) > 1) || (abs(rightBackPower) > 1))    {
@@ -128,22 +131,22 @@ public class DrivetrainOnly extends OpMode
         }
 
 
-        if(gamepad2.right_bumper == true) {
-            holderServo.setPosition(0.6);
+        if(gamepad2.right_trigger > 0) {
+            holderServo.setPower(0.65);
             }
-        else if(gamepad2.left_bumper == true){
-            holderServo.setPosition(1.0);
+        else if(gamepad2.left_trigger > 0){
+            holderServo.setPower(-0.65);
             }
-        else if(gamepad2.x == true){ holderServo.setPOsition(0.4)
+        else{ holderServo.setPower(0.0);}
         
         if(gamepad2.a) {
-            intakeMotor.setPower(0.7);
-            }
-        else if(gamepad2.y) {
-            intakeMotor.setPower(0);
+            intakeMotor.setPower(0.8);
             }
         else if(gamepad2.b) {
-            intakeMotor.setPower(-0.7);
+            intakeMotor.setPower(0);
+            }
+        else if(gamepad2.y) {
+            intakeMotor.setPower(-0.8);
             }
             
         
@@ -205,7 +208,7 @@ public class DrivetrainOnly extends OpMode
 
     }
 
-    public void wait (double seconds) {
+    public void wait(double seconds) {
         double startTime = runtime.seconds();
         while (runtime.seconds() - startTime < seconds) {
             continue;
@@ -213,3 +216,11 @@ public class DrivetrainOnly extends OpMode
 
     }
 }
+
+
+
+
+
+
+
+
