@@ -16,9 +16,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.Arrays;
 
 
-@TeleOp(name="Tell E I have ur op", group="Iterative Opmode")
+@TeleOp(name="Teletubbies", group="Iterative Opmode")
 
-public class Telletubbies extends OpMode
+public class Teletubbies extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
