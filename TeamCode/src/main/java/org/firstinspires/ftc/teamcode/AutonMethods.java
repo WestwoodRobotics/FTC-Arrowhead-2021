@@ -35,6 +35,7 @@ public class AutonMethods extends OGSureYeah {
     private DcMotorEx carouselMotor;
     private Servo holderServo;
     private DcMotorEx elevatorMotor;
+    private DcMotorEx intakeMotor;
     leftFrontMotor.setDirection(DcMotorEx.Direction.FORWARD);
     rightFrontMotor.setDirection(DcMotorEx.Direction.REVERSE);
     leftBackMotor.setDirection(DcMotorEx.Direction.FORWARD);
@@ -42,6 +43,7 @@ public class AutonMethods extends OGSureYeah {
     carouselMotor.setDirection(DcMotorEx.Direction.FORWARD);
     holderServo.setDirection(Servo.Direction.FORWARD);
     elevatorMotor.setDirection(DcMotorEx.Direction.FORWARD);
+    intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
 
     // P functionpublic static final double kP = 0.1 // placeholder value that needs to be tested
 
@@ -75,18 +77,15 @@ public class AutonMethods extends OGSureYeah {
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        elevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     public void resetEncodersAfterMovementComplete(){
-        while (leftFrontMotor.isBusy() || rightFrontMotor.isBusy() || leftBackMotor.isBusy() || rightBackMotor.isBusy()){
+        while (leftFrontMotor.getVelocity() > 0.05 || rightFrontMotor.getVelocity() > 0.05 || leftBackMotor.getVelocity() > 0.05 || rightBackMotor.getVelocity() > 0.05){
             //waits until the motors are done
         }
-        //TODO:put setZeroPowerBehaiviour(BRAKE thing)
         //once the motors are done moving, this method resets the encoders
-        if (!(leftFrontMotor.isBusy() || rightFrontMotor.isBusy() || leftBackMotor.isBusy() || rightBackMotor.isBusy())){
-            leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rightBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            leftBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        if (!(leftFrontMotor.getVelocity() > 0.05 || rightFrontMotor.getVelocity() > 0.05 || leftBackMotor.getVelocity() > 0.05 || rightBackMotor.getVelocity() > 0.05)){
+            resetAllEncoders();
         }
     }
 
@@ -103,8 +102,15 @@ public class AutonMethods extends OGSureYeah {
         rightBackMotor.setVelocity(power);
         leftBackMotor.setVelocity(-power);
     }
+    public void turnPows(double power) {
+        rightFrontMotor.setVelocity(-power);
+        leftFrontMotor.setVelocity(power);
+        rightBackMotor.setVelocity(-power);
+        leftBackMotor.setVelocity(power);
+    }
 
     //target setting methods
+    //TODO: Mabye put /2 or *2 or smth for mecanum targets since they might travel a different amount of distance on each rotation
     public void setFBTargets(double inches){
         rightFrontMotor.setTargetPosition((inches/WHEEL_SIRCONFERENCE_INCHES)*COUNTS_PER_MOTOR_REV*DRIVE_GEAR_REDUCTION);
         leftFrontMotor.setTargetPosition((inches/WHEEL_SIRCONFERENCE_INCHES)*COUNTS_PER_MOTOR_REV*DRIVE_GEAR_REDUCTION);
@@ -116,6 +122,70 @@ public class AutonMethods extends OGSureYeah {
         leftFrontMotor.setTargetPosition(((inches/WHEEL_SIRCONFERENCE_INCHES)*COUNTS_PER_MOTOR_REV*DRIVE_GEAR_REDUCTION));
         rightBackMotor.setTargetPosition(((inches/WHEEL_SIRCONFERENCE_INCHES)*COUNTS_PER_MOTOR_REV*DRIVE_GEAR_REDUCTION));
         leftBackMotor.setTargetPosition(-((inches/WHEEL_SIRCONFERENCE_INCHES)*COUNTS_PER_MOTOR_REV*DRIVE_GEAR_REDUCTION));
+    }
+    public void setTurnTargets(double degrees){
+        rightFrontMotor.setTargetPosition(-(((degrees*DISTANCE_PER_DEG_TURNED)/WHEEL_SIRCONFERENCE_INCHES)*COUNTS_PER_MOTOR_REV*DRIVE_GEAR_REDUCTION));
+        leftFrontMotor.setTargetPosition((((degrees*DISTANCE_PER_DEG_TURNED)/WHEEL_SIRCONFERENCE_INCHES)*COUNTS_PER_MOTOR_REV*DRIVE_GEAR_REDUCTION));
+        rightBackMotor.setTargetPosition(-(((degrees*DISTANCE_PER_DEG_TURNED)/WHEEL_SIRCONFERENCE_INCHES)*COUNTS_PER_MOTOR_REV*DRIVE_GEAR_REDUCTION));
+        leftBackMotor.setTargetPosition((((degrees*DISTANCE_PER_DEG_TURNED)/WHEEL_SIRCONFERENCE_INCHES)*COUNTS_PER_MOTOR_REV*DRIVE_GEAR_REDUCTION));
+    }
+
+    //drive methods (group previous few methods)
+    public void driveTo(double sideways, double straight, double speed){
+        setMecTargets(sideways);
+        setFBTargets(straight);
+        setAllMecPows(speed);
+        resetEncodersAfterMovementComplete();
+        setAllPows(speed);
+        resetEncodersAfterMovementComplete();
+    }
+
+    //servo methods
+    public void setServoPos(double pos){
+        holderServo.setPosition(pos)
+    }
+    public void setServoPlace(int place){
+        if (place == 1){
+            setServoPos(/*TODO: measure the position vals*/)
+        }
+        else if (place == 2){
+            setServoPos(/*TODO: measure the position vals*/);
+        }
+        else {
+            setServoPos(/*TODO: measure the position vals*/)
+        }
+    }
+
+    //elevator methods
+    public void setElevatorPos(int pos){
+        if (pos == 1){
+            elevatorMotor.setTargetPosition(/*TODO: the math*/);
+        }
+        else if (pos == 2){
+            elevatorMotor.setTargetPosition(/*TODO: the math*/);
+        }
+        else {
+            elevatorMotor.setTargetPosition(/*TODO: the math*/);
+        }
+        elevatorMotor.setVelocity(.4);
+        while(elevatorMotor.getVelocity > .05){}
+        elevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    //intake methods
+    public void intakeOn(power){
+        intakeMotor.setPower(power);
+    }
+    public void intakeOff(){
+        intakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+    }
+
+    // carousel methods
+    public void carouselOn(power){
+        carouselMotor.setPower(power)
+    }
+    public void carouselOff(){
+        carouselMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
 
 }

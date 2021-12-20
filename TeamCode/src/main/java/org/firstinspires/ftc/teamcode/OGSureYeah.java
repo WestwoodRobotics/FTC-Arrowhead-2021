@@ -14,11 +14,8 @@ import java.lang.Math;
 /*
 TODO-LIST:
 |-------------------------------------------------------|
-|                                                       |
-|*elevator (prepoprepositions) (constant levels)        |
-|*Color Sensor implementation                           |
-|*Intake stuff                                          |
-|*find out how many times code runs per/sec             |
+|*elevator positions                                    |
+|*delete pretty much everything on here                 |
 |-------------------------------------------------------|
 */
 
