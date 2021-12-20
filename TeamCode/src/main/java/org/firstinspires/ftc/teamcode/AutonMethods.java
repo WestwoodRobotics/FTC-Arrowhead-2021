@@ -107,7 +107,7 @@ public class AutonMethods extends OGSureYeah {
         leftFrontMotor.setVelocity(power);
         rightBackMotor.setVelocity(-power);
         leftBackMotor.setVelocity(power);
-    }
+    }//
 
     //target setting methods
     //TODO: Mabye put /2 or *2 or smth for mecanum targets since they might travel a different amount of distance on each rotation
