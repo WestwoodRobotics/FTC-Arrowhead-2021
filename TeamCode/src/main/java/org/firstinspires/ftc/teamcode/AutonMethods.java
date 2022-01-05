@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import java.util.*;
 
-
+//https://github.com/FIRST-Tech-Challenge/skystone/wiki/Using-Computer-Vision-in-FTC
 public class AutonMethods extends OGSureYeah {
     private ElapsedTime     runtime = new ElapsedTime();
     private ElapsedTime     servoTimer = new ElapsedTime();
