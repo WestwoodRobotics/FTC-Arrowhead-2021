@@ -92,5 +92,6 @@ public class AutonValTest {
             telemetry.update();
         }
     }
+    motorLocationTelems();
 
 }
