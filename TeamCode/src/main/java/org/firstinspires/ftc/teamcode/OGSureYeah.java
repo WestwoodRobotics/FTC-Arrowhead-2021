@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import java.lang.Math;
 
-@Autonomous(name="Pushbot: Auto Drive By Encoder", group="Iterative Opmode")
+@Autonomous(name="Good Autonomous", group="Iterative Opmode")
 
 /*
 TODO-LIST:
@@ -20,7 +20,7 @@ TODO-LIST:
 */
 
 /*public class PushbotAutoDriveByEncoder_Linear extends LinearOpMode {*/
-public class Auton extends LinearOpMode {
+public class OGSureYeah extends LinearOpMode {
 
 
     //HardwarePushbot         robot   = new HardwarePushbot();   // Use a Pushbot's hardware
