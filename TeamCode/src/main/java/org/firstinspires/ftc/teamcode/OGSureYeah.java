@@ -64,20 +64,27 @@ public class OGSureYeah extends LinearOpMode {
     double destinationFeet;
     double currentPositionFeet;
 
-    /*
-    Replace this pseudocode with actual code.
     
-    AutonMethods.setAllPIDFCoefs(0,0,0,0);
-    AutonMethods.resetAllEncoders();
-    AutonMethods.runUsingEncoders();
-    
-    AutonMethods.scanObjects;
-    AutonMethods.driveTo( 27 , 15 , 0.5);
-    AutonMethods.Gobackto the last one
-    AutonMethods.driveTo(16.5,1,0.5);
-    AutonMethods.caruosel
-    AutonMethods.driveTo(3,17,0.5);
+
+    public void runOpMode() {
+        
+        // ArrowheadPurelyOriginalWorkDoNotCopyTensorFlowMethods.something something scan file
+
+        AutonMethods.setAllPIDFCoefs(0,0,0,0); 
+        AutonMethods.resetAllEncoders();
+        AutonMethods.runUsingEncoders();
+
+        Orient the robot with the elevator facing towards the barcode. (The back of the robot?)
+
+
+        AutonMethods.driveTo( 27 , -15 , 0.5);  // Go to Alliance shipping hub
+
+        AutonMethods.driveTo(-27 ,  15 , 0.5);  // Go back to starting position
+        AutonMethods.driveTo(16.5,1,0.5);       // Go to carousel
+        AutonMethods.carouselOn(0.15, 5)        // Activate carousel
+        AutonMethods.driveTo(3,17,0.5);         // Park
     
     
 
+    }
 }
