@@ -51,7 +51,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  */
 @TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
 @Disabled
-public class ArrowheadPureOriginalWorkDoNotCopyTensorFlow extends AutonMethods {
+public class ArrowheadTestorFlow extends AutonMethods {
   /* Note: This sample uses the all-objects Tensor Flow model (FreightFrenzy_BCDM.tflite), which contains
    * the following 4 detectable objects
    *  0: Ball,
