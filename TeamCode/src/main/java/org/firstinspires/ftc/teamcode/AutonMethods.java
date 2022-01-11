@@ -12,11 +12,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import java.util.*;
 
+
 //https://github.com/FIRST-Tech-Challenge/skystone/wiki/Using-Computer-Vision-in-FTC
 public class AutonMethods extends OGSureYeah {
     private ElapsedTime     runtime = new ElapsedTime();
     private ElapsedTime     servoTimer = new ElapsedTime();
-    private ElapsedTime     PIDTime = new ElapsedTime(ElapsedTime.resolution milliseconds);
+    public ElapsedTime     carouselTimer = new ElapsedTime();
 
     final double     COUNTS_PER_MOTOR_REV          = 560 ;    // eg: TETRIX Motor Encoder
     final double     DRIVE_GEAR_REDUCTION          = 20 ;     // This is < 1.0 if geared UP
@@ -181,11 +182,19 @@ public class AutonMethods extends OGSureYeah {
     }
 
     // carousel methods
-    public void carouselOn(power){
-        carouselMotor.setPower(power)
+    public void carouselOn(double power, int seconds){
+        carouselTimer.reset();
+        while (carouselTimer.seconds() < seconds){
+            carouselMotor.setPower(power);
+        }
+        carouselMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        
     }
+    
+    /*
     public void carouselOff(){
         carouselMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
+    */
 
 }
