@@ -130,7 +130,7 @@ public class AutonMethods extends OGSureYeah {
         leftBackMotor.setTargetPosition((((degrees*DISTANCE_PER_DEG_TURNED)/WHEEL_SIRCONFERENCE_INCHES)*COUNTS_PER_MOTOR_REV*DRIVE_GEAR_REDUCTION));
     }
 
-    //drive methods (group previous few methods)
+    //drive methods in inches (group previous few methods)
     public void driveTo(double sideways, double straight, double speed){
         setMecTargets(sideways);
         setFBTargets(straight);
