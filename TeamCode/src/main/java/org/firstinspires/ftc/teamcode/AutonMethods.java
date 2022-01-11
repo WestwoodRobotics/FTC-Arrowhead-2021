@@ -59,7 +59,7 @@ public class AutonMethods extends OGSureYeah {
     double currentPositionFeet;
 
     //PID methods
-    public void setAllPIDFCoefs(double p, double i, double d, double f){
+    public void setAllPIDFCoefs(double p, double i, double d, double f){              // Is setVelocityPIDFCoefficients for the setVelocity commands?
         leftFrontMotor.setVelocityPIDFCoefficients(p,i,d,f);
         rightFrontMotor.setVelocityPIDFCoefficients(p,i,d,f);
         leftBackMotor.setVelocityPIDFCoefficients(p,i,d,f);
@@ -97,13 +97,13 @@ public class AutonMethods extends OGSureYeah {
         rightBackMotor.setVelocity(power);
         leftBackMotor.setVelocity(power);
     }
-    public void setAllMecPows(double power){
+    public void setAllMecPows(double power){  //what does mec mean
         rightFrontMotor.setVelocity(-power);
         leftFrontMotor.setVelocity(power);
         rightBackMotor.setVelocity(power);
         leftBackMotor.setVelocity(-power);
     }
-    public void turnPows(double power) {
+    public void turnPows(double power) {      // what's this vs mec
         rightFrontMotor.setVelocity(-power);
         leftFrontMotor.setVelocity(power);
         rightBackMotor.setVelocity(-power);
@@ -135,9 +135,9 @@ public class AutonMethods extends OGSureYeah {
     public void driveTo(double sideways, double straight, double speed){
         setMecTargets(sideways);
         setFBTargets(straight);
-        setAllMecPows(speed);
+        setAllMecPows(speed);  //sideways movement
         resetEncodersAfterMovementComplete();
-        setAllPows(speed);
+        setAllPows(speed);  // straight movement
         resetEncodersAfterMovementComplete();
     }
 
