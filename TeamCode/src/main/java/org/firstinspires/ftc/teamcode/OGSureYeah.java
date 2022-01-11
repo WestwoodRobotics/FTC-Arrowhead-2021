@@ -64,4 +64,20 @@ public class OGSureYeah extends LinearOpMode {
     double destinationFeet;
     double currentPositionFeet;
 
+    /*
+    Replace this pseudocode with actual code.
+    
+    AutonMethods.setAllPIDFCoefs(0,0,0,0);
+    AutonMethods.resetAllEncoders();
+    AutonMethods.runUsingEncoders();
+    
+    AutonMethods.scanObjects;
+    AutonMethods.driveTo( 27 , 15 , 0.5);
+    AutonMethods.Gobackto the last one
+    AutonMethods.driveTo(16.5,1,0.5);
+    AutonMethods.caruosel
+    AutonMethods.driveTo(3,17,0.5);
+    
+    
+
 }
