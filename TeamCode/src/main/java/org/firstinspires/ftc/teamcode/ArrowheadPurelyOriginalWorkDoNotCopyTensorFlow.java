@@ -32,6 +32,8 @@ package org.firstinspires.ftc.robotcontroller.external.samples;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -49,9 +51,8 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
-@Disabled
-public class ArrowheadPureOriginalWorkDoNotCopyTensorFlow extends AutonMethods {
+
+public class ArrowheadPurelyOriginalWorkDoNotCopyTensorFlow extends AutonMethods {
   /* Note: This sample uses the all-objects Tensor Flow model (FreightFrenzy_BCDM.tflite), which contains
    * the following 4 detectable objects
    *  0: Ball,
@@ -99,7 +100,7 @@ public class ArrowheadPureOriginalWorkDoNotCopyTensorFlow extends AutonMethods {
     private TFObjectDetector tfod;
 
     
-    public void runOpMode() {
+    public void computerVision() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -122,9 +123,6 @@ public class ArrowheadPureOriginalWorkDoNotCopyTensorFlow extends AutonMethods {
         }
 
         /** Wait for the game to begin */
-        telemetry.addData(">", "Press Play to start op mode");
-        telemetry.update();
-        waitForStart();
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
