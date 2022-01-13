@@ -9,19 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import java.lang.Math;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 @Autonomous(name="Pushbot: Auto Drive By Encoder", group="Iterative Opmode")
-=======
-@Autonomous(name="Good Autonomous", group="Iterative Opmode")
->>>>>>> parent of a4d14aa (this is why we have version control)
-=======
-@Autonomous(name="Good Autonomous", group="Iterative Opmode")
->>>>>>> parent of a4d14aa (this is why we have version control)
-=======
-@Autonomous(name="Good Autonomous", group="Iterative Opmode")
->>>>>>> parent of a4d14aa (this is why we have version control)
 
 /*
 TODO-LIST:
@@ -32,19 +20,7 @@ TODO-LIST:
 */
 
 /*public class PushbotAutoDriveByEncoder_Linear extends LinearOpMode {*/
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 public class Auton extends LinearOpMode {
-=======
-public class OGSureYeah extends LinearOpMode {
->>>>>>> parent of a4d14aa (this is why we have version control)
-=======
-public class OGSureYeah extends LinearOpMode {
->>>>>>> parent of a4d14aa (this is why we have version control)
-=======
-public class OGSureYeah extends LinearOpMode {
->>>>>>> parent of a4d14aa (this is why we have version control)
 
 
     //HardwarePushbot         robot   = new HardwarePushbot();   // Use a Pushbot's hardware
@@ -88,45 +64,6 @@ public class OGSureYeah extends LinearOpMode {
     double destinationFeet;
     double currentPositionFeet;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 
 }
-=======
-=======
->>>>>>> parent of a4d14aa (this is why we have version control)
-=======
->>>>>>> parent of a4d14aa (this is why we have version control)
-    
-
-    public void runOpMode() {
-        
-        // ArrowheadPurelyOriginalWorkDoNotCopyTensorFlowMethods.something something scan file
-
-        AutonMethods.setAllPIDFCoefs(0,0,0,0); 
-        AutonMethods.resetAllEncoders();
-        AutonMethods.runUsingEncoders();
-
-        Orient the robot with the elevator facing towards the barcode. (The back of the robot?)
-
-
-        AutonMethods.driveTo( 27 , -15 , 0.5);  // Go to Alliance shipping hub
-
-        AutonMethods.driveTo(-27 ,  15 , 0.5);  // Go back to starting position
-        AutonMethods.driveTo(16.5,1,0.5);       // Go to carousel
-        AutonMethods.carouselOn(0.15, 5)        // Activate carousel
-        AutonMethods.driveTo(3,17,0.5);         // Park
-    
-    
-
-    }
-}
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> parent of a4d14aa (this is why we have version control)
-=======
->>>>>>> parent of a4d14aa (this is why we have version control)
-=======
->>>>>>> parent of a4d14aa (this is why we have version control)

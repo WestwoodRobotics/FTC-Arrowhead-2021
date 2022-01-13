@@ -32,8 +32,6 @@ package org.firstinspires.ftc.robotcontroller.external.samples;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -51,8 +49,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-
-public class ArrowheadPurelyOriginalWorkDoNotCopyTensorFlowMethods extends AutonMethods {
+@TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
+@Disabled
+public class ConceptTensorFlowObjectDetection extends LinearOpMode {
   /* Note: This sample uses the all-objects Tensor Flow model (FreightFrenzy_BCDM.tflite), which contains
    * the following 4 detectable objects
    *  0: Ball,
@@ -100,7 +99,7 @@ public class ArrowheadPurelyOriginalWorkDoNotCopyTensorFlowMethods extends Auton
     private TFObjectDetector tfod;
 
     
-    public void computerVision() {
+    public void runOpMode() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -119,10 +118,13 @@ public class ArrowheadPurelyOriginalWorkDoNotCopyTensorFlowMethods extends Auton
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
-            tfod.setZoom(2.5, 16.0/9.0); //Placeholder. We can connect the camera to the robot and then figure out the scaling from there.
+            tfod.setZoom(2.5, 16.0/9.0);
         }
 
         /** Wait for the game to begin */
+        telemetry.addData(">", "Press Play to start op mode");
+        telemetry.update();
+        waitForStart();
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
