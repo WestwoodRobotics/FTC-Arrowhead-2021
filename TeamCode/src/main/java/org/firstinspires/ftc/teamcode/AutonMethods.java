@@ -12,11 +12,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import java.util.*;
 
+
 //https://github.com/FIRST-Tech-Challenge/skystone/wiki/Using-Computer-Vision-in-FTC
 public class AutonMethods extends OGSureYeah {
     private ElapsedTime     runtime = new ElapsedTime();
     private ElapsedTime     servoTimer = new ElapsedTime();
-    private ElapsedTime     PIDTime = new ElapsedTime(ElapsedTime.resolution milliseconds);
+    public ElapsedTime     carouselTimer = new ElapsedTime();
 
     final double     COUNTS_PER_MOTOR_REV          = 560 ;    // eg: TETRIX Motor Encoder
     final double     DRIVE_GEAR_REDUCTION          = 20 ;     // This is < 1.0 if geared UP
@@ -58,7 +59,7 @@ public class AutonMethods extends OGSureYeah {
     double currentPositionFeet;
 
     //PID methods
-    public void setAllPIDFCoefs(double p, double i, double d, double f){
+    public void setAllPIDFCoefs(double p, double i, double d, double f){              // Is setVelocityPIDFCoefficients for the setVelocity commands?
         leftFrontMotor.setVelocityPIDFCoefficients(p,i,d,f);
         rightFrontMotor.setVelocityPIDFCoefficients(p,i,d,f);
         leftBackMotor.setVelocityPIDFCoefficients(p,i,d,f);
@@ -96,13 +97,13 @@ public class AutonMethods extends OGSureYeah {
         rightBackMotor.setVelocity(power);
         leftBackMotor.setVelocity(power);
     }
-    public void setAllMecPows(double power){
+    public void setAllMecPows(double power){  //what does mec mean
         rightFrontMotor.setVelocity(-power);
         leftFrontMotor.setVelocity(power);
         rightBackMotor.setVelocity(power);
         leftBackMotor.setVelocity(-power);
     }
-    public void turnPows(double power) {
+    public void turnPows(double power) {      // what's this vs mec
         rightFrontMotor.setVelocity(-power);
         leftFrontMotor.setVelocity(power);
         rightBackMotor.setVelocity(-power);
@@ -130,13 +131,13 @@ public class AutonMethods extends OGSureYeah {
         leftBackMotor.setTargetPosition((((degrees*DISTANCE_PER_DEG_TURNED)/WHEEL_SIRCONFERENCE_INCHES)*COUNTS_PER_MOTOR_REV*DRIVE_GEAR_REDUCTION));
     }
 
-    //drive methods (group previous few methods)
+    //drive methods in inches (group previous few methods)
     public void driveTo(double sideways, double straight, double speed){
         setMecTargets(sideways);
         setFBTargets(straight);
-        setAllMecPows(speed);
+        setAllMecPows(speed);  //sideways movement
         resetEncodersAfterMovementComplete();
-        setAllPows(speed);
+        setAllPows(speed);  // straight movement
         resetEncodersAfterMovementComplete();
     }
 
@@ -181,11 +182,19 @@ public class AutonMethods extends OGSureYeah {
     }
 
     // carousel methods
-    public void carouselOn(power){
-        carouselMotor.setPower(power)
+    public void carouselOn(double power, int seconds){
+        carouselTimer.reset();
+        while (carouselTimer.seconds() < seconds){
+            carouselMotor.setPower(power);
+        }
+        carouselMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        
     }
+    
+    /*
     public void carouselOff(){
         carouselMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
+    */
 
 }
