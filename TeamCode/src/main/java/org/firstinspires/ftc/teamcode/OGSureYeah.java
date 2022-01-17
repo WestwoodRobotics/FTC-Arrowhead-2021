@@ -9,11 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import java.lang.Math;
 
-<<<<<<< HEAD
 @Autonomous(name="Pushbot: Auto Drive By Encoder", group="Iterative Opmode")
-=======
 @Autonomous(name="Good Autonomous", group="Iterative Opmode")
->>>>>>> parent of a4d14aa (this is why we have version control)
 
 /*
 TODO-LIST:
@@ -24,11 +21,7 @@ TODO-LIST:
 */
 
 /*public class PushbotAutoDriveByEncoder_Linear extends LinearOpMode {*/
-<<<<<<< HEAD
-public class Auton extends LinearOpMode {
-=======
 public class OGSureYeah extends LinearOpMode {
->>>>>>> parent of a4d14aa (this is why we have version control)
 
 
     //HardwarePushbot         robot   = new HardwarePushbot();   // Use a Pushbot's hardware
@@ -72,11 +65,9 @@ public class OGSureYeah extends LinearOpMode {
     double destinationFeet;
     double currentPositionFeet;
 
-<<<<<<< HEAD
 
 
 }
-=======
     
 
     public void runOpMode() {
@@ -101,4 +92,3 @@ public class OGSureYeah extends LinearOpMode {
 
     }
 }
->>>>>>> parent of a4d14aa (this is why we have version control)
