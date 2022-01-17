@@ -42,9 +42,6 @@ public class OGSureYeah extends LinearOpMode {
         elevatorMotor = hardwareMap.get(DcMotorEx.class, "elevatorMotor");
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
         
-        AutoMethods ottosMethods = new AutoMethods(leftFrontMotor, rightFrontMotor, leftBackMotor, rightBackMotor, carouselMotor, holderServo, elevatorMotor, intakeMotor);
-
-        
         leftFrontMotor.setDirection(DcMotorEx.Direction.FORWARD);
         rightFrontMotor.setDirection(DcMotorEx.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorEx.Direction.FORWARD);
@@ -53,6 +50,11 @@ public class OGSureYeah extends LinearOpMode {
         holderServo.setDirection(Servo.Direction.FORWARD);
         elevatorMotor.setDirection(DcMotorEx.Direction.FORWARD);
         intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        
+        AutoMethods AutonMethods = new AutoMethods(leftFrontMotor, rightFrontMotor, leftBackMotor, rightBackMotor, carouselMotor, holderServo, elevatorMotor, intakeMotor);
+
+        
+        // put setdirections back here if it breaks
         
         
         // ArrowheadPurelyOriginalWorkDoNotCopyTensorFlowMethods.something something scan file
