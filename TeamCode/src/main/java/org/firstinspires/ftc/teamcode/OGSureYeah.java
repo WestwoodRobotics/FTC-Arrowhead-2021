@@ -59,17 +59,17 @@ public class OGSureYeah extends LinearOpMode {
         
         // ArrowheadPurelyOriginalWorkDoNotCopyTensorFlowMethods.something something scan file
 
-        ottosMethods.setAllPositionPIDFCoefs(0.5); 
-        ottosMethods.setMecTargets(5);
-        ottosMethods.runUsingPositions();
+        AutonMethods.setAllPositionPIDFCoefs(0.5); 
+        AutonMethods.setMecTargets(5);
+        AutonMethods.runUsingPositions();
         
 
-        ottosMethods.driveToPosition( 27 , -15 , 600);  // Go to Alliance shipping hub
+        AutonMethods.driveToPosition( 27 , -15 , 600);  // Go to Alliance shipping hub
 
-        ottosMethods.driveToPosition(-27 ,  15 , 600);  // Go back to starting position
-        ottosMethods.driveToPosition(16.5,1,600);       // Go to carousel
-        ottosMethods.carouselOn(0.15, 5);        // Activate carousel
-        ottosMethods.driveToPosition(3,17,0.5);         // Park
+        AutonMethods.driveToPosition(-27 ,  15 , 600);  // Go back to starting position
+        AutonMethods.driveToPosition(16.5,1,600);       // Go to carousel
+        AutonMethods.carouselOn(0.15, 5);        // Activate carousel
+        AutonMethods.driveToPosition(3,17,0.5);         // Park
     
     
 
