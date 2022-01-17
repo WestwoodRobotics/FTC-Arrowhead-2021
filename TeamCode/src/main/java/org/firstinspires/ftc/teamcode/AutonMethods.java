@@ -23,7 +23,7 @@ public class AutoMethods{
     public ElapsedTime     carouselTimer = new ElapsedTime();
 
     final int     COUNTS_PER_MOTOR_REV          = 560 ;    // eg: TETRIX Motor Encoder
-    final int     DRIVE_GEAR_REDUCTION          = 20;     // This is < 1.0 if geared UP
+    final double  DRIVE_GEAR_REDUCTION          = 18.8803;     // This is < 1.0 if geared UP
     final double     WHEEL_SIRCONFERENCE_INCHES    = 11.78097;     // For figuring circumference
     final double     COUNTS_PER_INCH             = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /(WHEEL_SIRCONFERENCE_INCHES);
     final double     DRIVE_SPEED                 = 0.6;
