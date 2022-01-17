@@ -1,18 +1,16 @@
 package org.firstinspires.ftc.robotcontroller.external.samples;
 //done other than testing?
 import static java.lang.Math.abs;
-<<<<<<< HEAD
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-=======
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
->>>>>>> parent of a4d14aa (this is why we have version control)
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -22,7 +20,6 @@ import java.util.*;
 //https://github.com/FIRST-Tech-Challenge/skystone/wiki/Using-Computer-Vision-in-FTC
 public class AutonValTest {
     private ElapsedTime     runtime = new ElapsedTime();
-<<<<<<< HEAD
 
 
     private Servo holderServo;
@@ -33,7 +30,6 @@ public class AutonValTest {
 
     // P functionpublic static final double kP = 0.1 // placeholder value that needs to be tested
 
-=======
     private ElapsedTime     servoTimer = new ElapsedTime();
     private ElapsedTime     PIDTime = new ElapsedTime(ElapsedTime.resolution milliseconds);
     public interface Telemetry
@@ -72,27 +68,22 @@ public class AutonValTest {
     double previousError = 0.0;
     double maxPotentialOvershoot = .01;
 
->>>>>>> parent of a4d14aa (this is why we have version control)
     double mecanumPower;
     double destinationFeet;
     double currentPositionFeet;
 
     //PID methods
     public void setAllPIDFCoefs(double p, double i, double d, double f){
-<<<<<<< HEAD
 
         elevatorMotor.setVelocityPIDFCoefficients(p,i,d,f);
-=======
         leftFrontMotor.setVelocityPIDFCoefficients(p,i,d,f);
         rightFrontMotor.setVelocityPIDFCoefficients(p,i,d,f);
         leftBackMotor.setVelocityPIDFCoefficients(p,i,d,f);
         rightBackMotor.setVelocityPIDFCoefficients(p,i,d,f);
->>>>>>> parent of a4d14aa (this is why we have version control)
     }
 
     //encoder methods
     public void resetAllEncoders(){
-<<<<<<< HEAD
 
         elevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
@@ -103,7 +94,6 @@ public class AutonValTest {
     double elevatorPosTicks = 72537.59;
     public int motorLocationTelems(){
         elevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-=======
         leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -118,7 +108,6 @@ public class AutonValTest {
     }
     public motorLocationTelems(){
         elevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER)
->>>>>>> parent of a4d14aa (this is why we have version control)
         elevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         elevatorPosTicks = 0;
 
@@ -129,13 +118,10 @@ public class AutonValTest {
             telemetry.addData("ServoPos", "%.3f", holderServo.getPosition());
             telemetry.update();
         }
-<<<<<<< HEAD
         return 1;
     }
 
-=======
     }
     motorLocationTelems();
->>>>>>> parent of a4d14aa (this is why we have version control)
 
 }
