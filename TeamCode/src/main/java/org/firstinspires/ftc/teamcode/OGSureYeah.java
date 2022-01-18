@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode;
-
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -62,7 +62,7 @@ public class OGSureYeah extends LinearOpMode {
         AutonMethods.setAllPositionPIDFCoefs(0.5); 
         AutonMethods.setMecTargets(5);
         AutonMethods.runUsingPositions();
-        
+        telemetry.addData("elevator position", elevatorMotor.getCurrentPosition());
 
         AutonMethods.driveToPosition( 27 , -15 , 600);  // Go to Alliance shipping hub
 
