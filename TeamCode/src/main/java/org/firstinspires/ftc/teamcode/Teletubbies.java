@@ -22,14 +22,14 @@ public class Teletubbies extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotorEx leftFrontWheel;
-    private DcMotorEx rightFrontWheel;
-    private DcMotorEx leftBackWheel;
-    private DcMotorEx rightBackWheel;
-    private DcMotorEx carouselMotor;
-    private CRServo holderServo;
-    private DcMotorEx elevatorMotor;
-    private DcMotorEx intakeMotor;
+    private DcMotorEx leftFrontWheel;   // Front Left Wheel
+    private DcMotorEx rightFrontWheel;  // Front Right Wheel
+    private DcMotorEx leftBackWheel;    // Back Left Wheel
+    private DcMotorEx rightBackWheel;   // Back Right Wheel
+    private DcMotorEx carouselMotor;    // Carousel Wheel
+    private CRServo holderServo;        // Freight Receptacle
+    private DcMotorEx elevatorMotor;    // Elevator Lift
+    private DcMotorEx intakeMotor;      // Intake Wheels
 
     /*
      * Code to run ONCE when the driver hits INIT
