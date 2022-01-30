@@ -152,18 +152,23 @@ public class Teletubbies extends OpMode
         
         if (gamepad2.dpad_up) {
             elevatorMotor.setPower(0.75);
+            // Elevator Up (Fast)
         }
         else if (gamepad2.dpad_down) {
             elevatorMotor.setPower(-0.75);
+            // Elevator Down (Fast)
         }
         else if (gamepad2.dpad_left) {
             elevatorMotor.setPower(-0.25);
+            // Elevator Down (Slow)
         }
         else if (gamepad2.dpad_right) {
             elevatorMotor.setPower(0.25);
+            // Elevator Up (Slow)
         }
         else {
             elevatorMotor.setPower(0.0);
+            // Cease Motion
         }
         
         
