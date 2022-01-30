@@ -93,24 +93,19 @@ public class Teletubbies extends OpMode
         double rightBackPower;
         double carouselPower;
 
-        // Choose to drive using either Tank Mode, or POV Mode
-        // Comment out the method that's not used.  The default below is POV.
 
-        // POV Mode uses left stick to go forward, and right stick to turn.
-        // - This uses basic math to combine motions and is easier to drive straight.
         double forwardBackward = -gamepad1.left_stick_y;
         double straifing =  gamepad1.left_stick_x;
         double turning = gamepad1.right_stick_x;
-
-
-        //double elevatorHeight = elevatorMotor.getCurrentPosition(); TODO: test position values
 
         leftFrontPower    = 0.8*(forwardBackward - turning - straifing);
         rightFrontPower   = 0.8*(forwardBackward + turning + straifing);
         leftBackPower     = 0.8*(forwardBackward + turning - straifing);
         rightBackPower    = 0.8*(forwardBackward - turning + straifing);
+        
         double[] powVals = {abs(leftFrontPower), abs(rightFrontPower), abs(leftBackPower), abs(rightBackPower)};
         Arrays.sort(powVals);
+        
         if ((abs(leftFrontPower)) > 1 || (abs(rightFrontPower)) > 1 || (abs(leftBackPower) > 1) || (abs(rightBackPower) > 1))    {
             double maxPower = powVals[3];
             leftFrontPower    /= maxPower;
@@ -118,6 +113,7 @@ public class Teletubbies extends OpMode
             leftBackPower     /= maxPower;
             rightBackPower    /= maxPower;
         }
+        
 
         if(gamepad1.a){
             carouselMotor.setPower(0.15);
