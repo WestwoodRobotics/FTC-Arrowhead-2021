@@ -153,7 +153,11 @@ public class JustInCase extends LinearOpMode {
         telemetry.addData("Parth", "Complete");
         telemetry.update();
     }
-
+        stop(){
+        leftFrontWheel.setPower(0);
+        leftBackWheel.setPower(0);
+        rightFrontWheel.setPower(0);
+        rightBackWheel.setPower(0);
 
 }
 
