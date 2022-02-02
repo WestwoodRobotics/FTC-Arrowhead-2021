@@ -30,7 +30,11 @@ public class Teletubbies extends OpMode
     private CRServo holderServo;        // Freight Receptacle
     private DcMotorEx elevatorMotor;    // Elevator Lift
     private DcMotorEx intakeMotor;      // Intake Wheels
-
+    double leftFrontPower;
+    double rightFrontPower;
+    double leftBackPower;
+    double rightBackPower;
+    double carouselPower;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -87,11 +91,7 @@ public class Teletubbies extends OpMode
 
     public void loop() {
         // Setup a variable for each drive wheel to save power level for telemetry
-        double leftFrontPower;
-        double rightFrontPower;
-        double leftBackPower;
-        double rightBackPower;
-        double carouselPower;
+
 
 
         double forwardBackward = -gamepad1.left_stick_y;
