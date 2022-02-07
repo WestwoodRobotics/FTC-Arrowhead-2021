@@ -62,9 +62,25 @@ public class JustInCase extends LinearOpMode {
     double currentPositionFeet;
     double orientation = 0;
 
-
-
-
+    change wheel to motor
+    
+    public void setFrontBack(int position) {
+        leftFrontMotor.setTargetPosition(position);
+        rightFrontMotor.setTargetPosition(position);
+        leftBackMotor.setTargetPosition(position);
+        rightBackMotor.setTargetPosition(position);
+    }
+    public void setLeftRight(int position){
+        leftFrontMotor.setTargetPosition(position);
+        rightFrontMotor.setTargetPosition(-position);
+        leftBackMotor.setTargetPosition(-position);
+        rightBackMotor.setTargetPosition(position);
+    }
+    public void setPowers(double power){
+        leftFrontMotor.setPower(power);
+        rightFrontMotor.setPower(power);
+        leftBackMotor.setPower(power);
+        rightBackMotor.setPower(power);
 
     public void runOpMode() {
 
@@ -122,32 +138,9 @@ public class JustInCase extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-        while (runtime.milliseconds() < 200)
-        {
-            leftFrontWheel.setPower(.6);
-            leftBackWheel.setPower(-.6);
-            rightFrontWheel.setPower(-.6);
-            rightBackWheel.setPower(.6);
-        }
-        leftFrontWheel.setPower(0);
-        leftBackWheel.setPower(0);
-        rightFrontWheel.setPower(0);
-        rightBackWheel.setPower(0);
-        while (runtime.milliseconds() < 1100){
-            carouselMotor.setPower(.15);
-        }
-        carouselMotor.setPower(0);
-        while (runtime.milliseconds() < 200){
-            leftFrontWheel.setPower(-.6);
-            leftBackWheel.setPower(.6);
-            rightFrontWheel.setPower(.6);
-            rightBackWheel.setPower(-.6);
-        }
-        leftFrontWheel.setPower(0);
-        leftBackWheel.setPower(0);
-        rightFrontWheel.setPower(0);
-        rightBackWheel.setPower(0);
-
+          
+        // Go somewhere
+        
 
 
         telemetry.addData("Parth", "Complete");
