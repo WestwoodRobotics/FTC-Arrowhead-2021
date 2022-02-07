@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import java.lang.Math;
 
-@Autonomous(name="Emergency Backup", group="Iterative Opmode")
+@Autonomous(name="Emergency Backup")
 
 
 public class JustInCase extends LinearOpMode {
@@ -23,18 +23,18 @@ public class JustInCase extends LinearOpMode {
     private ElapsedTime     intakeTime = new ElapsedTime();
 
 
-    static final int     COUNTS_PER_MOTOR_REV          = 560 ;
-    static final int     DRIVE_GEAR_REDUCTION          = 20 ;
-    static final double     WHEEL_SIRCONFERENCE_INCHES    = 11.78097 ;
+    static final int     COUNTS_PER_MOTOR_REV          = 28 ;
+    static final double     DRIVE_GEAR_REDUCTION          =  18.9;
+    static final double     WHEEL_SIRCONFERENCE_INCHES    = 11.8677165 ;
     static final double     COUNTS_PER_INCH             = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /WHEEL_SIRCONFERENCE_INCHES;
-    static final double     DRIVE_speade                 = 0.6;
-    static final double     TURN_speade                  = 0.5;
-    static final double     ELEVATOR_GEAR_RATIO         = 50.9;
-    static final double     COUNTS_PER_ELEVATOR_REV     = 1425;
-    static final double     MAX_ELEVATOR_CAPABLITY      = 123;
-    static final double     ELEVATOR_SPOOL_DIAMETER_INCHES = 1.49606;
-    static final double     ELE_TICKS_PER_INCH   = (ELEVATOR_GEAR_RATIO*COUNTS_PER_ELEVATOR_REV)/ELEVATOR_SPOOL_DIAMETER_INCHES; //someone check my math pls
-    static final int     TICKS_PER_REVOLUTION          = DRIVE_GEAR_REDUCTION*COUNTS_PER_MOTOR_REV;
+//     static final double     DRIVE_speade                 = 0.6;
+//     static final double     TURN_speade                  = 0.5;
+//     static final double     ELEVATOR_GEAR_RATIO         = 50.9;
+//     static final double     COUNTS_PER_ELEVATOR_REV     = 1425;
+//     static final double     MAX_ELEVATOR_CAPABLITY      = 123;
+//     static final double     ELEVATOR_SPOOL_DIAMETER_INCHES = 1.49606;
+//     static final double     ELE_TICKS_PER_INCH   = (ELEVATOR_GEAR_RATIO*COUNTS_PER_ELEVATOR_REV)/ELEVATOR_SPOOL_DIAMETER_INCHES; //someone check my math pls
+//     static final int     TICKS_PER_REVOLUTION          = DRIVE_GEAR_REDUCTION*COUNTS_PER_MOTOR_REV;
 
 
     private DcMotorEx leftFrontWheel;
@@ -48,46 +48,41 @@ public class JustInCase extends LinearOpMode {
 
 
 
-    // P function
-    final double kP = 0.1;// placeholder value that needs to be tested
-    final double kI = 1.0;
-    final double kD = 0.1;
-    double errorSum = 0.0;
-    double error = 0.0;
-    double previousError = 0.0;
-    double maxPotentialOvershoot = .01;
-    final double distancePerDegTurned = 0.01665618;
-    double mecanumPower = 0.8;
-    double destinationFeet;
-    double currentPositionFeet;
-    double orientation = 0;
+//     // P function
+//     final double kP = 0.1;// placeholder value that needs to be tested
+//     final double kI = 1.0;
+//     final double kD = 0.1;
+//     double errorSum = 0.0;
+//     double error = 0.0;
+//     double previousError = 0.0;
+//     double maxPotentialOvershoot = .01;
+//     final double distancePerDegTurned = 0.01665618;
+//     double mecanumPower = 0.8;
+//     double destinationFeet;
+//     double currentPositionFeet;
+//     double orientation = 0;
 
     change wheel to motor
     
-    public void setFrontBack(int position) {
-        leftFrontMotor.setTargetPosition(position);
-        rightFrontMotor.setTargetPosition(position);
-        leftBackMotor.setTargetPosition(position);
-        rightBackMotor.setTargetPosition(position);
+    public void setFrontBack(int inches) {
+        leftFrontMotor.setTargetPosition(inches*COUNTS_PER_INCH);
+        rightFrontMotor.setTargetPosition(inches*COUNTS_PER_INCH);
+        leftBackMotor.setTargetPosition(inches*COUNTS_PER_INCH);
+        rightBackMotor.setTargetPosition(inches*COUNTS_PER_INCH);
     }
-    public void setLeftRight(int position){
-        leftFrontMotor.setTargetPosition(position);
-        rightFrontMotor.setTargetPosition(-position);
-        leftBackMotor.setTargetPosition(-position);
-        rightBackMotor.setTargetPosition(position);
+    public void setLeftRight(int inches){
+        leftFrontMotor.setTargetPosition(inches*COUNTS_PER_INCH);
+        rightFrontMotor.setTargetPosition(-inches*COUNTS_PER_INCH);
+        leftBackMotor.setTargetPosition(-inches*COUNTS_PER_INCH);
+        rightBackMotor.setTargetPosition(inches*COUNTS_PER_INCH);
     }
     public void setPowers(double power){
         leftFrontMotor.setPower(power);
         rightFrontMotor.setPower(power);
         leftBackMotor.setPower(power);
         rightBackMotor.setPower(power);
-
-    public void runOpMode() {
-
-
-
-        telemetry.addData("Status", "Initialized");
-
+    
+    public void init() {
         leftFrontWheel  = hardwareMap.get(DcMotorEx.class, "leftFrontWheel");
         rightFrontWheel = hardwareMap.get(DcMotorEx.class, "rightFrontWheel");
         leftBackWheel = hardwareMap.get(DcMotorEx.class, "leftBackWheel");
@@ -124,22 +119,27 @@ public class JustInCase extends LinearOpMode {
         rightBackWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBackWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFrontWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFrontWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFrontWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBackWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBackWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+        
+    public void runOpMode() {
 
-        leftFrontWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFrontWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBackWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBackWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Parth0",  "Starting at %7d :%7d");
-
+        telemetry.addData("if your gonna slam into the wall you're always gonna get where you need to go");
         telemetry.update();
-        // telemetry.addData("if your gonna slam into the wall you're always gonna get where you need to go");
+
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
           
         // Go somewhere
+        setFrontBack(5);
+        setPowers(0.5);
         
 
 
