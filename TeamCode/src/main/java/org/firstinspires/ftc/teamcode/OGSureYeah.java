@@ -1,27 +1,42 @@
 package org.firstinspires.ftc.teamcode;
-//done other than testing?
 
-import static java.lang.Math.abs;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
-
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import java.lang.Math;
+
+@Autonomous(name="Cool Auton")
 
 
-import java.util.Arrays;
+public class OGSureYeah extends LinearOpMode {
 
 
-@TeleOp(name="Teletubbies", group="Iterative Opmode")
+    //HardwarePushbot         robot   = new HardwarePushbot();   // Use a Pushbot's hardware
+    private ElapsedTime     runtime = new ElapsedTime();
+    private ElapsedTime     servoTimer = new ElapsedTime();
+    private ElapsedTime     PIDTime = new ElapsedTime();
+    private ElapsedTime     intakeTime = new ElapsedTime();
 
-public class Teletubbies extends OpMode
-{
-    // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
+
+    static final double     COUNTS_PER_MOTOR_REV          = 28;
+    static final double     DRIVE_GEAR_REDUCTION          =  18.9;
+    static final double     Motor_SIRCONFERENCE_INCHES    = 11.8677165 ;
+    static final double     COUNTS_PER_INCH             = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /Motor_SIRCONFERENCE_INCHES;
+//     static final double     DRIVE_speade                 = 0.6;
+//     static final double     TURN_speade                  = 0.5;
+//     static final double     ELEVATOR_GEAR_RATIO         = 50.9;
+//     static final double     COUNTS_PER_ELEVATOR_REV     = 1425;
+//     static final double     MAX_ELEVATOR_CAPABLITY      = 123;
+//     static final double     ELEVATOR_SPOOL_DIAMETER_INCHES = 1.49606;
+//     static final double     ELE_TICKS_PER_INCH   = (ELEVATOR_GEAR_RATIO*COUNTS_PER_ELEVATOR_REV)/ELEVATOR_SPOOL_DIAMETER_INCHES; //someone check my math pls
+//     static final int     TICKS_PER_REVOLUTION          = DRIVE_GEAR_REDUCTION*COUNTS_PER_MOTOR_REV;
+
+
     private DcMotorEx leftFrontMotor;
     private DcMotorEx rightFrontMotor;
     private DcMotorEx leftBackMotor;
@@ -31,16 +46,73 @@ public class Teletubbies extends OpMode
     private DcMotorEx elevatorMotor;
     private DcMotorEx intakeMotor;
 
-    /*
-     * Code to run ONCE when the driver hits INIT
-     */
 
-    public void init() {
-        telemetry.addData("Status", "Initialized");
 
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
+//     // P function
+//     final double kP = 0.1;// placeholder value that needs to be tested
+//     final double kI = 1.0;
+//     final double kD = 0.1;
+//     double errorSum = 0.0;
+//     double error = 0.0;
+//     double previousError = 0.0;
+//     double maxPotentialOvershoot = .01;
+//     final double distancePerDegTurned = 0.01665618;
+//     double mecanumPower = 0.8;
+//     double destinationFeet;
+//     double currentPositionFeet;
+//     double orientation = 0;
+
+    public void setFrontBack(int inches) {
+        leftFrontMotor.setTargetPosition(inches*(int)COUNTS_PER_INCH);
+        rightFrontMotor.setTargetPosition(inches*(int)COUNTS_PER_INCH);
+        leftBackMotor.setTargetPosition(inches*(int)COUNTS_PER_INCH);
+        rightBackMotor.setTargetPosition(inches*(int)COUNTS_PER_INCH);
+    }
+    public void setLeftRight(int inches){
+        leftFrontMotor.setTargetPosition(inches*(int)COUNTS_PER_INCH);
+        rightFrontMotor.setTargetPosition(-inches*(int)COUNTS_PER_INCH);
+        leftBackMotor.setTargetPosition(-inches*(int)COUNTS_PER_INCH);
+        rightBackMotor.setTargetPosition(inches*(int)COUNTS_PER_INCH);
+    }
+    public void setPowers(double power){
+        leftFrontMotor.setPower(power);
+        rightFrontMotor.setPower(power);
+        leftBackMotor.setPower(power);
+        rightBackMotor.setPower(power);
+    }
+    public void setFrontBackVelocity(int inches,double mod) {
+        leftFrontMotor.setVelocity(inches*(int)(mod*COUNTS_PER_INCH));
+        rightFrontMotor.setVelocity(inches*(int)(mod*COUNTS_PER_INCH));
+        leftBackMotor.setVelocity(inches*(int)(mod*COUNTS_PER_INCH));
+        rightBackMotor.setVelocity(inches*(int)(mod*COUNTS_PER_INCH));
+    }
+    public void setLeftRightVelocity(int inches,double mod) {
+        leftFrontMotor.setVelocity(inches*(int)(mod*COUNTS_PER_INCH));
+        rightFrontMotor.setVelocity(-inches*(int)(mod*COUNTS_PER_INCH));
+        leftBackMotor.setVelocity(-inches*(int)(mod*COUNTS_PER_INCH));
+        rightBackMotor.setVelocity(inches*(int)(mod*COUNTS_PER_INCH));
+    }
+    public void setPositionPID(int P){
+        leftFrontMotor.setPositionPIDFCoefficients(P);
+        rightFrontMotor.setPositionPIDFCoefficients(P);
+        leftBackMotor.setPositionPIDFCoefficients(P);
+        rightBackMotor.setPositionPIDFCoefficients(P);
+    }
+    public void setVelocityPID(double p, double i, double d, double f){
+        leftFrontMotor.setVelocityPIDFCoefficients(p,i,d,f);
+        rightFrontMotor.setVelocityPIDFCoefficients(p,i,d,f);
+        leftBackMotor.setVelocityPIDFCoefficients(p,i,d,f);
+        rightBackMotor.setVelocityPIDFCoefficients(p,i,d,f);
+    }
+    public void stopMotors(){
+        leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+       
+    public void runOpMode() {
         leftFrontMotor  = hardwareMap.get(DcMotorEx.class, "leftFrontMotor");
         rightFrontMotor = hardwareMap.get(DcMotorEx.class, "rightFrontMotor");
         leftBackMotor = hardwareMap.get(DcMotorEx.class, "leftBackMotor");
@@ -50,178 +122,83 @@ public class Teletubbies extends OpMode
         elevatorMotor = hardwareMap.get(DcMotorEx.class, "elevatorMotor");
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
 
-        //TODO: add max and min values for servo
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
         leftFrontMotor.setDirection(DcMotorEx.Direction.FORWARD);
         rightFrontMotor.setDirection(DcMotorEx.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorEx.Direction.FORWARD);
         rightBackMotor.setDirection(DcMotorEx.Direction.REVERSE);
         carouselMotor.setDirection(DcMotorEx.Direction.FORWARD);
         holderServo.setDirection(CRServo.Direction.FORWARD);
-        elevatorMotor.setDirection(DcMotorEx.Direction.REVERSE);
-        intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        elevatorMotor.setDirection(DcMotorEx.Direction.FORWARD);
 
-        // Tell the driver that initialization is complete.
+        
         telemetry.addData("Status", "Initialized");
-    }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-     */
-    @Override
-    public void init_loop() {
-    }
 
-    /*
-     * Code to run ONCE when the driver hits PLAY
-     */
 
-    public void start() {
+
+        // Send telemetry message to signify robot waiting;
+        telemetry.addData("Status", "Resetting Encoders");    //
+        telemetry.update();
+
+        leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        // Send telemetry message to indicate successful Encoder reset
+        telemetry.addData("Parth0",  "Starting at %7d :%7d");
+        telemetry.update();
+        setVelocityPID(10,0,3,13.703116805);
+
+        // Wait for the game to start (driver presses PLAY)
+        waitForStart();
+        // Go somewhere
+        //setFrontBackVelocity(100);
+        // setPowers(1);
+        // leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        // rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        // leftBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        // rightBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         runtime.reset();
-    }
-
-    /*
-     * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-     */
-
-    public void loop() {
-        // Setup a variable for each drive Motor to save power level for telemetry
-        double leftFrontPower;
-        double rightFrontPower;
-        double leftBackPower;
-        double rightBackPower;
-        double carouselPower;
-
-        // Choose to drive using either Tank Mode, or POV Mode
-        // Comment out the method that's not used.  The default below is POV.
-
-        // POV Mode uses left stick to go forward, and right stick to turn.
-        // - This uses basic math to combine motions and is easier to drive straight.
-        double forwardBackward = gamepad1.left_stick_y;
-        double straifing =  gamepad1.left_stick_x;
-        double turning = gamepad1.right_stick_x;
-
-
-        //double elevatorHeight = elevatorMotor.getCurrentPosition(); TODO: test position values
-
-        leftFrontPower    = 0.6*(forwardBackward + turning - straifing);
-        rightFrontPower   = 0.6*(forwardBackward - turning + straifing);
-        leftBackPower     = 0.6*(forwardBackward + turning + straifing);
-        rightBackPower    = 0.6*(forwardBackward - turning - straifing);
-        double[] powVals = {abs(leftFrontPower), abs(rightFrontPower), abs(leftBackPower), abs(rightBackPower)};
-        Arrays.sort(powVals);
-        if ((abs(leftFrontPower)) > 1 || (abs(rightFrontPower)) > 1 || (abs(leftBackPower) > 1) || (abs(rightBackPower) > 1))    {
-            double maxPower = powVals[3];
-            leftFrontPower    /= maxPower;
-            rightFrontPower   /= maxPower;
-            leftBackPower     /= maxPower;
-            rightBackPower    /= maxPower;
+        while(runtime.milliseconds() < 400){
+            setLeftRightVelocity((int)-(COUNTS_PER_INCH),1.4);
         }
-
-        if(gamepad1.a){
-            carouselMotor.setPower(0.15);
-        }
-        else if (gamepad1.y){
-            carouselMotor.setPower(-0.15);
-
-        }
-        else if(gamepad1.b){
-            carouselMotor.setPower(0);
-        }
-
-
-        if(gamepad2.right_trigger > 0) {
-            holderServo.setPower(0.6);
-            }
-        else if(gamepad2.left_trigger > 0){
-            holderServo.setPower(-0.6);
-            }
-        else{ holderServo.setPower(0.0);}
-        
-        if(gamepad2.a) {
-            intakeMotor.setPower(0.8);
-            }
-        else if(gamepad2.b) {
-            intakeMotor.setPower(0);
-            }
-        else if(gamepad2.y) {
-            intakeMotor.setPower(-0.8);
-            }
-            
-        
-        if (gamepad2.dpad_up) {
-            elevatorMotor.setPower(0.6);
-        }
-        else if (gamepad2.dpad_down) {
-            elevatorMotor.setPower(-0.6);
-        }
-        else if (gamepad2.dpad_left) {
-            elevatorMotor.setPower(-0.3);
-        }
-        else if (gamepad2.dpad_right) {
-            elevatorMotor.setPower(0.3);
-        }
-        else {
-            elevatorMotor.setPower(0.0);
-        }
-        
-        
-
-        if (gamepad1.left_trigger > 0) {
-            leftFrontPower = 0.3;
-            leftBackPower = 0.3;
-            rightFrontPower = -0.3;
-            rightBackPower = -0.3;
-        }
-        else if (gamepad1.right_trigger > 0) {
-            leftFrontPower = -0.3;
-            leftBackPower = -0.3;
-            rightFrontPower = 0.3;
-            rightBackPower = 0.3;
-        }
-
-        // Send calculated power to Motors
-        leftFrontMotor.setPower(leftFrontPower);
-        rightFrontMotor.setPower(rightFrontPower);
-        leftBackMotor.setPower(leftBackPower);
-        rightBackMotor.setPower(rightBackPower);
-
-        telemetry.addData("ok ", "buddy: " + runtime.toString());
-    
-        telemetry.addData("OK buddy", "leftFrontBuddy (%.2f), rightFrontBuddy (%.2f), leftBackOK (%.2f), rightBackOK (%.2f)", leftFrontMotor.getPower(), rightFrontMotor.getPower(), leftBackMotor.getPower(),rightBackMotor.getPower());
-
-
-    }
-
-    /*
-     * Code to run ONCE after the driver hits STOP
-     */
-
-    public void stop() {
-        leftFrontMotor.setPower(0);
-        rightFrontMotor.setPower(0);
-        leftBackMotor.setPower(0);
+        stopMotors();
+        runtime.reset();
+        setFrontBackVelocity((int)-(COUNTS_PER_INCH),1);
+        sleep(300);
+        // while(runtime.milliseconds() < 300){
+        //     setFrontBackVelocity((int)-(COUNTS_PER_INCH),1);
+        // }
+        stopMotors();
+        runtime.reset();
+        carouselMotor.setPower(0.15);
+        sleep(6000);
+        // while(runtime.milliseconds() < 6000){
+        //     carouselMotor.setPower(0.15);
+        // }
+        stopMotors();
         carouselMotor.setPower(0);
-        rightBackMotor.setPower(0);
-        
-
-    }
-
-    public void wait(double seconds) {
-        double startTime = runtime.seconds();
-        while (runtime.seconds() - startTime < seconds) {
-            continue;
+        runtime.reset();
+        while(runtime.milliseconds() < 600){
+            setLeftRightVelocity((int)-(COUNTS_PER_INCH),1.4);
         }
-
+        stopMotors();
+        runtime.reset();
+        while(runtime.milliseconds() < 3500){
+            setFrontBackVelocity((int)(COUNTS_PER_INCH),1.2);
+            
+            
+        }
+        
+        
+        
+        
+       
     }
+
 }
-
-
-
-
-
-
-
-
-
