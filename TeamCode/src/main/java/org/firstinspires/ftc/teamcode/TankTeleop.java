@@ -18,8 +18,7 @@ public class TankTeleop extends OpMode {
     CustomMotor[] motors = {new CustomMotor("leftFront"),new CustomMotor("rightFront"),new CustomMotor("leftBack"),new CustomMotor("rightBack"),new CustomMotor("rotateArm"),new CustomMotor("intake")};
     Servo leftCarousel;
     Servo rightCarousel;
-    double timeLastPressed = 0;
-    boolean pressed = false;
+    boolean slowMode = false;
     double velocityMultiplier = 1;
     double tickTolerance = 90;
     double carouselPos = 0.5;
@@ -53,7 +52,6 @@ public class TankTeleop extends OpMode {
         motors[1].motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         motors[2].motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         motors[3].motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        motors[4].motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         motors[5].motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         //Motor PID Coefficients
@@ -63,22 +61,9 @@ public class TankTeleop extends OpMode {
         motors[3].motor.setVelocityPIDFCoefficients(15, 0, 0, 0);
         motors[4].motor.setVelocityPIDFCoefficients(15, 0, 0, 0);
         motors[5].motor.setVelocityPIDFCoefficients(15, 0, 0, 0);
-//        motors[4].motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-//        motors[4].motor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-
     }
 
-//    void rotateDegrees(double angle){
-//        if(!motors[4].motor.isBusy()){
-//            motors[4].motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            motors[4].motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            motors[4].motor.setTargetPosition((int)(angle/360.0+motors[4].motor.getCurrentPosition()));
-//            motors[4].motor.setTargetPositionTolerance((int)tickTolerance);
-//            motors[4].motor.setPower(1);
-//        }
-//
-//
-//    }
+
 
     @Override
     public void start() {
@@ -88,29 +73,18 @@ public class TankTeleop extends OpMode {
     public void loop() {
         //Velocity Multiplier
 
-        if(pressed&& !gamepad1.a) {
-            pressed = false;
-        } else if(pressed && gamepad1.a && runtime.time() - timeLastPressed > 0.35){
-            if (velocityMultiplier == 1) {
-                velocityMultiplier = 0.2;
-            } else {
-                velocityMultiplier = 1;
-            }
-            pressed = false;
-            timeLastPressed = 0;
-
-            gamepad1.rumble(100);
+        if(gamepad1.dpad_up && slowMode){
+            slowMode = false;
+            velocityMultiplier = 1;
+            gamepad1.rumble(200);
+        } else if(gamepad1.dpad_down && !slowMode){
+            slowMode = true;
+            velocityMultiplier = 0.2;
+            gamepad1.rumble(200);
         }
 
-        if (gamepad1.a) {
-            if(!pressed){
-                pressed = true;
-                timeLastPressed = runtime.time();
-            }
-        }
-
-        double r = -gamepad1.left_stick_y; //forward
-        double y = gamepad1.right_stick_x; //turn
+        double y = -gamepad1.left_stick_y; //forward
+        double r = gamepad1.right_stick_x; //turn
 
         //Individual Wheel Velocity
         double[] velocity = {
@@ -135,7 +109,7 @@ public class TankTeleop extends OpMode {
 
         //Velocity Multiplier, Motor RPM
         for (int i = 0; i < 4; i++) {
-            motors[i].motor.setPower(velocity[i]*velocityMultiplier);
+            motors[i].motor.setVelocity(velocity[i]*velocityMultiplier*5000);
         }
 
         //Carousel
@@ -152,8 +126,8 @@ public class TankTeleop extends OpMode {
         }
 
         //Rotating Arm
-        if(Math.abs(gamepad2.right_stick_y) > 0){
-            motors[4].motor.setVelocity(gamepad2.right_stick_y*2500);
+        if(gamepad2.right_stick_y != 0){
+            motors[4].motor.setPower(gamepad2.right_stick_y);
         } else {
             motors[4].motor.setPower(0);
         }
@@ -162,7 +136,7 @@ public class TankTeleop extends OpMode {
         if (gamepad2.right_trigger>0) {
             motors[5].motor.setVelocity(5000*gamepad2.right_trigger);
         } else if (gamepad2.left_trigger>0) {
-            motors[5].motor.setVelocity(-5000*gamepad2.left_trigger);
+            motors[5].motor.setVelocity(-1000*gamepad2.left_trigger);
         } else {
             motors[5].motor.setVelocity(0);
         }
@@ -174,7 +148,6 @@ public class TankTeleop extends OpMode {
         telemetry.addData("FRONT RIGHT Motor",  motors[1].motor.getVelocity() + "rps");
         telemetry.addData("BACK LEFT Motor",    motors[2].motor.getVelocity() + "rps");
         telemetry.addData("BACK RIGHT Motor",   motors[3].motor.getVelocity() + "rps");
-        telemetry.addData("Carousel",           motors[4].motor.getVelocity() + "rps");
         telemetry.addData("Rotating Arm power",       motors[4].motor.getPower() + "rps");
         telemetry.addData("rotating arm position", motors[4].motor.getCurrentPosition());
 
